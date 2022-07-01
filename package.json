@@ -1,0 +1,23 @@
+{
+  "name": "comhomeserver",
+  "version": "1.0.0",
+  "description": "💻 컴퓨터공학과 공식 홈페이지 개선을 위한 프로젝트 서버 💻",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ComHomeDev/ComHomeServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ComHomeDev/ComHomeServer/issues"
+  },
+  "homepage": "https://github.com/ComHomeDev/ComHomeServer#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1"
+  }
+}
