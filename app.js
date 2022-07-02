@@ -1,10 +1,9 @@
 const port=3000;
 const express = require('express');
 const app = express();
-const bodyParser = require("body-parser");
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.get('/', async (req, res) => {
     res.send('comhome_server');
@@ -12,4 +11,4 @@ app.get('/', async (req, res) => {
 
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
-  });
+});
