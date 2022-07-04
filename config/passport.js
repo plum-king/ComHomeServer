@@ -2,6 +2,8 @@ const passport = require('passport');
 const GoogleStrategy  = require('passport-google-oauth2').Strategy;
 const db = require('../db');
 
+require('dotenv').config();
+
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
@@ -11,11 +13,11 @@ passport.deserializeUser(function(user, done) {
 
 passport.use(new GoogleStrategy(
   {
-    clientID      : '',
-    clientSecret  : '',
+    clientID      : process.env.GOOGLE_CLIENT_ID,
+    clientSecret  : process.env.GOOGLE_SECRET,
     callbackURL   : '/auth/google/callback',
     passReqToCallback   : true
-  }, function(request, res, accessToken, refreshToken, profile, done){
+  }, function(request, accessToken, refreshToken, profile, done){
         if((profile.email).indexOf('@sungshin.ac.kr')==-1){
         console.log('성신이메일아님');
         return done('Use only sungshin email!');
@@ -23,7 +25,7 @@ passport.use(new GoogleStrategy(
     else{
       console.log('성신이메일임');
       process.nextTick(function(){
-        var user = {}
+        let user = {}
         findUser(profile.id,(response)=>{
             user.id = profile.id;
             user.name=profile.displayName;
