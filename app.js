@@ -15,14 +15,14 @@ app.use(express.json());
 
 
 //홈페이지 생성 (req.user는 passport의 serialize를 통해 user 정보 저장되어있음)
-app.get('/',(req,res)=>{
+app.get('/', async (req, res) => {
 	const temp = getPage('Welcome', 'Welcome to visit...',getBtn(req.user));
     res.send(temp);
 });
 
 //프론트 임시로->url 바로 들어가도 된다.
 const getBtn = (user) =>{
-    return user !== undefined ? `${user.name} | <a href="/">home</a>` : `<a href="/auth/google">Google Login</a>`;
+    return user !== undefined ? `${user.name} | <a href="/auth/logout">logout</a>` : `<a href="/auth/google">Google Login</a>`;
 }
 
 const getPage = (title, description,auth)=>{

@@ -2,7 +2,7 @@ const express = require('express');
 const router   = express.Router();
 const passport = require('../config/passport.js');
 
-router.get('/login', function(req,res){
+router.get('/login', async (req, res) => {
   res.redirect('/auth/google');
 });
 
