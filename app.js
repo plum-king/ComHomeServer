@@ -25,7 +25,7 @@ app.get('/', async (req, res) => {
 
 //프론트 임시로->url 바로 들어가도 된다.
 const getBtn = (user) =>{
-    return user !== undefined ? `${user.name} | <a href="/auth/logout">logout</a>` : `<a href="/auth/google">Google Login</a>`;
+    return user !== undefined ? `${user.name} | <a href="/auth/logout">logout</a> <br><br> <a href = "/extra_review_list">대외활동 후기 바로가기</a>`: `<a href="/auth/google">Google Login</a>`;
 }
 
 const getPage = (title, description,auth)=>{
@@ -49,8 +49,10 @@ const getPage = (title, description,auth)=>{
 
 //routes
 app.use('/auth', require('./routes/auth'));
-app.use('/extra', require('./routes/extra'));
-
+app.get("/extra_review_list", require("./routes/extra_review_list"));
+app.get("/extra_review_write", require("./routes/extra_review"));
+app.post("/extra_review_write", require("./routes/extra_review"));
+app.get("/extra_review_detail/:review_no", require("./routes/extra_review_detail"));
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
 });
