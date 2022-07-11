@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>comhome</title>
+</head>
+
+<body>
+    <a href="/extra/write">대외활동 후기 게시판</a>
+    <a href="/job/write">취업 후기 게시판</a>
+
+    <form name="extraWriteForm" action="/extra/write" method="post">
+        <label for="compName">제목</label>
+        <input type="text" class="input_text" name="title" id="title" required />
+        <br>
+        <input type="text" class="input_text" name="content" id="content" placeholder="컴퓨터공학과 수정이들에게 유익한 내용을 공유해주세요!" required />
+        <br>
+        <button>완료</button>
+    </form>
+</body>
+
+</html>

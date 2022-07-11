@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const passport  = require('passport');
 const session   = require('express-session');
+const path = require('path');
 
 app.use(session({secret:'MySecret', resave: false, saveUninitialized:true}));
 
@@ -13,6 +14,8 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 //홈페이지 생성 (req.user는 passport의 serialize를 통해 user 정보 저장되어있음)
 app.get('/', async (req, res) => {
@@ -46,6 +49,7 @@ const getPage = (title, description,auth)=>{
 
 //routes
 app.use('/auth', require('./routes/auth'));
+app.use('/extra', require('./routes/extra'));
 
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
