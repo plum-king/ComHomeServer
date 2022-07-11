@@ -40,6 +40,7 @@ const getPage = (title, description,auth)=>{
             ${auth}
             <h1>${title}</h1>
             <p>${description}</p>
+            <br> <a href="/exhibition">작품전시페이지</a>
         </body>
         </html>
         `;
