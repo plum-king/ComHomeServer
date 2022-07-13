@@ -6,6 +6,8 @@ const templates = require("../lib/templates");
 const path = require("path");
 
 router.get("/extra_review_detail/:review_no", async (req, res) => {
+  if(!req.user.id) res.send("로그인이 필요한 서비스 입니다.");
+
   const review_no = path.parse(req.params.review_no).base;
   console.log(review_no);
   const title = review_no + "번 게시글";

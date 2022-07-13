@@ -29,18 +29,17 @@ router.post("/extra_review_write", async (req, res) => {
   const post = req.body;
   const title = post.review_title;
   const cont = post.review_cont;
-  //   const time = new Date().getTime().valueOf(); // 현재 시간
   try {
     const data = await pool.query(
       `INSERT INTO extra_review(review_title, review_cont, iduser) VALUES(?, ?, ?)`,
       [title, cont, req.user.id]
     );
-    //console.log("됐음");
     const head = ``;
     const body = `
-    <script>window.history.forward(); function noBack(){window.history.forward();}</script>
     <h3>${title}</h3>
     <p>${cont}</p>
+
+    <a href="/extra_review_list">목록으로 돌아가기</a>
     `;
   
     var html = templates.HTML(title, head, body);
