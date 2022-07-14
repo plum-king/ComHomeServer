@@ -22,10 +22,12 @@ function date_to_str(format) {
 router.get("/job_review_list", async (req, res) => {
   const title = "취업 후기 게시판";
   const head = ``;
-  let body = `게시글 순서 | 게시글 제목 | 작성 날짜<br>`;
+  let body = `게시글 제목 | 작성 날짜<br>`;
   //  | 작성자 <br>`;
   let i = 0;
-  const data = await pool.query(`SELECT * FROM job_review`);
+  const data = await pool.query(
+    `SELECT * FROM job_review ORDER BY upload_time DESC`
+  );
   let data_det = data[0];
 
   while (i < data_det.length) {
@@ -35,11 +37,11 @@ router.get("/job_review_list", async (req, res) => {
     let timestamp = data_det[i].upload_time;
     let upload_time = date_to_str(timestamp);
     // console.log(upload_time);
-    body += `<a href = "/job_review_detail/${data_det[i].review_no}">${data_det[i].review_no}</a> | ${data_det[i].review_title} | ${upload_time}<br>`;
+    body += `<a href = "/job_review_detail/${data_det[i].review_no}"><div>${data_det[i].review_title}| ${upload_time}<br></div></a> `;
     //익명으로 얘기된 거면 제외 | ${data2[0][0].name}} <br>`;
     i++;
   }
-  body += `<a href = "/job_review_write">취업 후기글 작성하러 가기</a> <br> <a href="/"> 홈으로 돌아가기 </a>`;
+  body += `<br><a href = "/job_review_write">취업 후기글 작성하러 가기</a> <br> <a href="/"> 홈으로 돌아가기 </a>`;
   var html = templates.HTML(title, head, body);
   res.send(html);
 });

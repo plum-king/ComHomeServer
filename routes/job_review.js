@@ -35,8 +35,8 @@ router.post("/job_review_write", async (req, res) => {
       `INSERT INTO job_review(review_title, review_cont, iduser) VALUES(?, ?, ?)`,
       [title, cont, req.user.id]
     );
-    console.log("됐음");
-    res.redirect("/");
+    // console.log("됐음");
+    res.redirect(`/job_review_detail/${data[0].insertId}`);
   } catch (err) {
     console.error(err);
   }
