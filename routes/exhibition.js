@@ -10,14 +10,14 @@ router.get('/', async (req, res) => {
     let data;
     try {
       data = await pool.query("select * from exhibition");
-      console.log(data[0]);
+      //console.log(data[0]);
     } catch (err) {
       console.error(err);
       res.write('<script>window.location="/"</script>');
     }
     
     const temp = getPage('Comhome','exhibition-project',getBtn(req.user), data[0]);
-    console.log(temp);
+    //console.log(temp);
     res.send(temp);
   }
   else{
@@ -89,7 +89,7 @@ const getPage = (title, description,auth,data)=>{
       <p>${description}</p>
       <hr>`
 
-      console.log(data.length);
+      //console.log(data.length);
       for(let i=0; i < data.length; i++) {
         //console.log('여기 들어오긴 하냐>???');
         console.log(data[i]);
@@ -99,7 +99,7 @@ const getPage = (title, description,auth,data)=>{
         <hr>`;
       }
 
-  console.log(htmlbody)
+  //console.log(htmlbody)
 	return htmlbody+`</body></html>`;
 }
 
