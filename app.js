@@ -13,6 +13,8 @@ app.use(passport.session());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
+app.use('/uploads',express.static(__dirname+'/uploads')); 
+
 //홈페이지 생성 (req.user는 passport의 serialize를 통해 user 정보 저장되어있음)
 app.get("/", async (req, res) => {
   const temp = getPage("Welcome", "Welcome to visit...", getBtn(req.user));
@@ -38,6 +40,7 @@ const getPage = (title, description, auth) => {
             ${auth}
             <h1>${title}</h1>
             <p>${description}</p>
+            <br> <a href="/exhibition">작품전시페이지</a>
         </body>
         </html>
         `;
@@ -46,6 +49,7 @@ const getPage = (title, description, auth) => {
 
 //routes
 app.use('/auth', require('./routes/auth'));
+app.use('/exhibition', require('./routes/exhibition'));
 app.get("/extra_review_list", require("./routes/extra_review_list"));
 app.get("/extra_review_write", require("./routes/extra_review"));
 app.post("/extra_review_write", require("./routes/extra_review"));
