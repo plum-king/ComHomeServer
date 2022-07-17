@@ -13,6 +13,8 @@ app.use(passport.session());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
+app.use('/uploads',express.static(__dirname+'/uploads')); 
+
 //홈페이지 생성 (req.user는 passport의 serialize를 통해 user 정보 저장되어있음)
 app.get("/", async (req, res) => {
   const temp = getPage("Welcome", "Welcome to visit...", getBtn(req.user));
@@ -21,11 +23,9 @@ app.get("/", async (req, res) => {
 });
 
 //프론트 임시로->url 바로 들어가도 된다.
-const getBtn = (user) => {
-  return user !== undefined
-    ? `${user.name} | <a href="/auth/logout">logout</a> <br><br> <a href = "/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/edu_contest_list">교육/공모전 글 바로가기</a>`
-    : `<a href="/auth/google">Google Login</a>`;
-};
+const getBtn = (user) =>{
+    return user !== undefined ? `${user.name} | <a href="/auth/logout">logout</a> <br><br> <a href = "/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/student_council_notice_list">학생회 공지</a>`: `<a href="/auth/google">Google Login</a>`;
+}
 
 const getPage = (title, description, auth) => {
   return `
@@ -41,13 +41,15 @@ const getPage = (title, description, auth) => {
             ${auth}
             <h1>${title}</h1>
             <p>${description}</p>
+            <br> <a href="/exhibition">작품전시페이지</a>
         </body>
         </html>
         `;
 };
 
 //routes
-app.use("/auth", require("./routes/auth"));
+app.use('/auth', require('./routes/auth'));
+app.use('/exhibition', require('./routes/exhibition'));
 app.get("/extra_review_list", require("./routes/extra_review_list"));
 app.get("/extra_review_write", require("./routes/extra_review"));
 app.post("/extra_review_write", require("./routes/extra_review"));
@@ -61,6 +63,7 @@ app.get("/job_review_list", require("./routes/job_review_list"));
 app.get("/job_review_write", require("./routes/job_review"));
 app.post("/job_review_write", require("./routes/job_review"));
 app.get("/job_review_detail/:review_no", require("./routes/job_review_detail"));
+
 //교육/공모전 글
 app.get("/edu_contest_list", require("./routes/edu_contest_list"));
 app.get("/edu_contest_write", require("./routes/edu_contest"));
@@ -69,8 +72,17 @@ app.get(
   "/edu_contest_detail/:edu_contest_no",
   require("./routes/edu_contest_detail")
 );
+
 //교육/공모전 댓글
 app.post("/edu_cont_comment_write", require("./routes/edu_cont_comment"));
+
+//학생회 공지 글
+app.get("/student_council_notice_list", require("./routes/student_council_notice_list"));
+app.get("/student_council_notice_check", require("./routes/student_council_notice_check"));
+app.post("/student_council_notice_check", require("./routes/student_council_notice_check"));
+app.get("/student_council_notice_write", require("./routes/student_council_notice"));
+app.post("/student_council_notice_write", require("./routes/student_council_notice"));
+app.get("/student_council_notice_detail/:sc_notice_no", require("./routes/student_council_notice_detail"));
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
