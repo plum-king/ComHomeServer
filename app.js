@@ -23,7 +23,7 @@ app.get("/", async (req, res) => {
 
 //프론트 임시로->url 바로 들어가도 된다.
 const getBtn = (user) =>{
-    return user !== undefined ? `${user.name} | <a href="/auth/logout">logout</a> <br><br> <a href = "/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/job_review_list">취업 후기 바로가기</a>`: `<a href="/auth/google">Google Login</a>`;
+    return user !== undefined ? `${user.name} | <a href="/auth/logout">logout</a> <br><br> <a href = "/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/student_council_notice_list">학생회 공지</a>`: `<a href="/auth/google">Google Login</a>`;
 }
 
 const getPage = (title, description, auth) => {
@@ -59,6 +59,12 @@ app.get("/job_review_list", require("./routes/job_review_list"));
 app.get("/job_review_write", require("./routes/job_review"));
 app.post("/job_review_write", require("./routes/job_review"));
 app.get("/job_review_detail/:review_no", require("./routes/job_review_detail"));
+app.get("/student_council_notice_list", require("./routes/student_council_notice_list"));
+app.get("/student_council_notice_check", require("./routes/student_council_notice_check"));
+app.post("/student_council_notice_check", require("./routes/student_council_notice_check"));
+app.get("/student_council_notice_write", require("./routes/student_council_notice"));
+app.post("/student_council_notice_write", require("./routes/student_council_notice"));
+app.get("/student_council_notice_detail/:sc_notice_no", require("./routes/student_council_notice_detail"));
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
