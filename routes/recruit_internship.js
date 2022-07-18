@@ -28,6 +28,9 @@ router.get("/post", async (req, res) => {
       <label> 사진: 
       <input type='file' name='img' accept='image/jpg, image/png, image/jpeg' /></label>
       <br>
+      <label> 파일: 
+      <input type='file' name='file' multiple/></label>
+
       <button type="submit"><b>등록</b></button>
       </form>
     `;
@@ -48,17 +51,38 @@ const upload = multer({
     }),
 });
 
+const fileFields = upload.fields([
+  { name: 'img', maxCount: 1 },
+  { name: 'file', maxCount: 8 },
+])
+  router.post("/post", fileFields, async (req, res) => {
 
-  router.post("/post", upload.single('img'), async (req, res) => {
+    const { img, file } = req.files;
+    console.log(req.files);
+    //console.log(img);
+    //console.log(file);
+
+    let count;
+    if(req.files.file){
+      count=Object.keys(file).length;
+    }
 
     const post = req.body;
+    const date=new Date();
+    const notice_id=date % 10000;
     const title = post.notice_title;
     const cont = post.notice_cont;
-    const notice_img = req.file == undefined ? '' : req.file.path;
-    const date=new Date();
+    const notice_img = req.files.img == undefined ? '' : req.files.img[0].path;
+    const notice_file = req.files.file == undefined ? '' : req.files.file[0].path;
+
+    console.log('74행');
+    //console.log(notice_img);
+    //console.log(req.files.file[0].path);
+    //console.log(req.files.file[1].path);
 
     const sql=`INSERT INTO recruit_intern(notice_id, user_id, not_title, not_content, not_created_date, not_edited_date, not_views, not_img) VALUES(?,?,?,?,?,?,?,?)`
-    const params=[date % 10000, req.user.id, title, cont, date, date, 0, notice_img];
+    const params=[notice_id, req.user.id, title, cont, date, date, 0, notice_img];
+
     try {
         const data = await pool.query(sql,params);
         res.write(`<script type="text/javascript">alert('Recruit Internship post Success !!')</script>`);
@@ -67,6 +91,14 @@ const upload = multer({
     } catch (err) {
         console.error(err);
         res.write('<script>window.location="/"</script>');
+    }
+    //첨부파일 여러개 table에 저장
+    for(let i=0;i<count;i++){
+      try {
+        const data = await pool.query(`INSERT INTO file_intern(notice_id, file_info) VALUES(?,?)`,[notice_id, req.files.file[i].path]);
+      } catch (err) {
+        console.error(err);
+      }
     }
   });
   

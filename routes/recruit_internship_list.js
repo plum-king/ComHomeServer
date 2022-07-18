@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
     const data = await pool.query(`SELECT * FROM recruit_intern ORDER BY not_created_date DESC`);
     const time_data = await pool.query(`SELECT date_format(not_created_date, '%Y-%m-%d') FROM recruit_intern ORDER BY not_created_date DESC`);
     let data_det = data[0];
-    console.log(data_det);
+    //console.log(data_det);
   
     while (i < data_det.length) {
       const data2 = await pool.query(`SELECT name FROM user where iduser = ?`, [
