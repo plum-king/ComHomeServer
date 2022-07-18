@@ -12,11 +12,11 @@ router.get("/edu_contest_write", async (req, res) => {
     <form action="/edu_contest_write" method ="post">
     <p>${req.user.name}</p>
     <label> 제목: 
-      <input type = "text" name = "review_title" placeholder = "제목을 작성하세요" /> </label>
+      <input type = "text" name = "edu_contest_title" placeholder = "제목을 작성하세요" /> </label>
       <br>
       <br>
       <label> 내용: 
-      <input type = "textarea" name = "review_cont" placeholder = "내용을 작성하세요" /> </label>
+      <input type = "textarea" name = "edu_contest_cont" placeholder = "내용을 작성하세요" /> </label>
       <br>
       <button type="submit"><b>입력</b></button>
       </form>
@@ -28,8 +28,8 @@ router.get("/edu_contest_write", async (req, res) => {
 
 router.post("/edu_contest_write", async (req, res) => {
   const post = req.body;
-  const title = post.review_title;
-  const cont = post.review_cont;
+  const title = post.edu_contest_title;
+  const cont = post.edu_contest_cont;
   try {
     const data = await pool.query(
       `INSERT INTO edu_contest(edu_contest_title, edu_contest_cont, iduser) VALUES(?, ?, ?)`,
@@ -40,7 +40,7 @@ router.post("/edu_contest_write", async (req, res) => {
       <h3>${title}</h3>
       <p>${cont}</p>
   
-      <a href="/extra_review_list">목록으로 돌아가기</a>
+      <a href="/edu_contest_list">목록으로 돌아가기</a>
       `;
 
     var html = templates.HTML(title, head, body);

@@ -27,7 +27,7 @@ router.get("/edu_contest_detail/:edu_contest_no", async (req, res) => {
     [edu_contest_no]
   );
   let i = 0;
-  console.log(comment[0][0]);
+  // console.log(comment[0][0]);
   if (comment[0][0] == undefined) {
     //댓글 없는 경우
     body += "<p>아직 댓글이 없습니다.</p>";
