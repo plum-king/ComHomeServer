@@ -15,7 +15,7 @@ router.get("/post", async (req, res) => {
     const title = "채용인턴십 글 작성";
     const head = ``;
     const body = `
-    <form action="/recruit_internship/post" method ="post" enctype="multipart/form-data">
+    <form action="/recruit_internship/post" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
     <b>채용인턴십 공지 작성</b>
     <br>
     <label> 제목: 
@@ -57,6 +57,7 @@ const fileFields = upload.fields([
 ])
   router.post("/post", fileFields, async (req, res) => {
 
+    //req.setCharacterEncoding("utf-8");
     const { img, file } = req.files;
     console.log(req.files);
     //console.log(img);
@@ -95,7 +96,7 @@ const fileFields = upload.fields([
     //첨부파일 여러개 table에 저장
     for(let i=0;i<count;i++){
       try {
-        const data = await pool.query(`INSERT INTO file_intern(notice_id, file_info) VALUES(?,?)`,[notice_id, req.files.file[i].path]);
+        const data = await pool.query(`INSERT INTO file_intern(notice_id, file_infoN, file_originN) VALUES(?,?,?)`,[notice_id, req.files.file[i].path, file_originN]);
       } catch (err) {
         console.error(err);
       }

@@ -63,6 +63,7 @@ app.get("/job_review_detail/:review_no", require("./routes/job_review_detail"));
 app.use('/recruit_internship', require('./routes/recruit_internship'));
 app.use('/recruit_internship_list', require('./routes/recruit_internship_list'));
 app.use('/recruit_internship_detail', require('./routes/recruit_internship_detail'));
+app.use('/download', require('./routes/download'));
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
