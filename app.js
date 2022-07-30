@@ -52,6 +52,7 @@ const getPage = (title, description, auth) => {
 //routes
 app.use("/auth", require("./routes/auth"));
 app.use("/exhibition", require("./routes/exhibition"));
+app.use("/exhibition_edit", require("./routes/exhibition_edit"));
 app.get("/extra_review_list", require("./routes/extra_review_list"));
 app.get("/extra_review_write", require("./routes/extra_review"));
 app.post("/extra_review_write", require("./routes/extra_review"));
