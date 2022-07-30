@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
   }
   else{
     res.write(`<script type="text/javascript">alert('Please Login First !!')</script>`);
-    res.write('<script>window.location="/"</script>');
+    res.write('<script>window.location="/auth/login"</script>');
   }
 
 });
@@ -49,10 +49,12 @@ router.post('/post', upload.single('img'), async (req, res) => {
     const userid=req.user.id;
     const exh_title=req.body.exh_title;
     const exh_content=req.body.exh_content;
+    const exh_award=req.body.exh_award;
+    const exh_contestName=req.body.exh_contestName;
     const exh_img = req.file == undefined ? '' : req.file.path;
 
-    const sql = "INSERT INTO exhibition (userid, exh_title, exh_content, exh_img) VALUES (?, ?, ?, ? )";
-    const params = [userid, exh_title, exh_content, exh_img];
+    const sql = "INSERT INTO exhibition (userid, exh_title, exh_content, exh_img, exh_award, exh_contestName) VALUES (?, ?, ?, ?, ?, ? )";
+    const params = [userid, exh_title, exh_content, exh_img, exh_award, exh_contestName];
 
     try {
         const data = await pool.query(sql,params);
@@ -89,17 +91,25 @@ const getPage = (title, description,auth,data)=>{
       <p>${description}</p>
       <hr>`
 
-      //console.log(data.length);
       for(let i=0; i < data.length; i++) {
-        //console.log('여기 들어오긴 하냐>???');
-        console.log(data[i]);
-        htmlbody +=`<p><b>프로젝트이름: ${data[i].exh_title}</b></p><br>
+        //console.log(data[i]);
+        htmlbody +=`<p><b>프로젝트이름: ${data[i].exh_title}</b></p>`
+        
+        if(data[i].exh_award==null){
+          htmlbody+=`<p>수상경력: 없음</p>`
+        }else{htmlbody+=`<p>수상경력: ${data[i].exh_award}</p>`}
+        if(data[i].exh_contestName==null){
+          htmlbody+=`<p>참가대회: 없음</p>`
+        }else{
+          htmlbody+=`<p>참가대회: ${data[i].exh_contestName}</p>` 
+        }
+
+        htmlbody+=`
         <img src="${data[i].exh_img}" />
         <p>프로젝트 소개: ${data[i].exh_content}</p>
         <hr>`;
       }
 
-  //console.log(htmlbody)
 	return htmlbody+`</body></html>`;
 }
 
@@ -126,10 +136,18 @@ const postPage=(description)=>{
         <td><textarea name="exh_content"></textarea></td>
         </tr>
         <tr>
-        <td>프로필 이미지</td>
+        <td>프로젝트 이미지</td>
         <td><input type='file' name='img' accept='image/jpg, image/png, image/jpeg' /></td>
         </tr>
         <br>
+        <tr>
+        <td>수상경력: (없으면 빈칸) </td>
+        <td><input type="text" name="exh_award" placeholder = "ex)소웨경 금상,공모전 입상"> </td>
+        </tr>
+        <tr>
+        <td>프로젝트 참가한 대회 이름: </td>
+        <td><input type="text" name="exh_contestName" placeholder = "ex)개인프로젝트,소웨경,000공모전"></td>
+        </tr>
         <br>
         <tr>
         <td><input type="submit" value="등록"></td>
