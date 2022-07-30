@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
       res.write('<script>window.location="/"</script>');
     }
     
-    const temp = getPage('Comhome','exhibition-project',getBtn(req.user), data[0]);
+    const temp = getPage('Comhome','exhibition-project', req.user, data[0]);
     //console.log(temp);
     res.send(temp);
   }
@@ -69,12 +69,6 @@ router.post('/post', upload.single('img'), async (req, res) => {
       }
 });
 
-
-//exhibiton 프론트 임시
-const getBtn = (user) =>{
-    return `${user.name} | <a href="/exhibition/post">작품전시작성</a>` ;
-}
-
 const getPage = (title, description,auth,data)=>{
   let htmlbody;
   htmlbody=` <!DOCTYPE html>
@@ -86,15 +80,27 @@ const getPage = (title, description,auth,data)=>{
       <title>${title}</title>
   </head>
   <body>
-      ${auth}
+      ${auth.name} | <a href="/exhibition/post">작품전시작성</a>
       <h1>${title}</h1>
       <p>${description}</p>
       <hr>`
 
       for(let i=0; i < data.length; i++) {
-        //console.log(data[i]);
+        if(auth.id==data[i].userid){
+          htmlbody+=`
+          <form action="/exhibition_edit" method="post">
+          <input type="hidden" name="id" value="${data[i].idexhibition}">
+          <input type="submit" name="edit" value="수정하기">
+          </form>
+
+          <form action="/exhibition_edit/delete" method="post">
+          <input type="hidden" name="id" value="${data[i].idexhibition}">
+          <input type="submit" name="delete" value="삭제하기"
+          onClick="return confirm('Are you sure you want to delete this exhibition?')">
+          </form>`
+        }
         htmlbody +=`<p><b>프로젝트이름: ${data[i].exh_title}</b></p>`
-        
+
         if(data[i].exh_award==null){
           htmlbody+=`<p>수상경력: 없음</p>`
         }else{htmlbody+=`<p>수상경력: ${data[i].exh_award}</p>`}
