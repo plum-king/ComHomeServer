@@ -44,6 +44,7 @@ const getPage = (title, description, auth) => {
             <h1>${title}</h1>
             <p>${description}</p>
             <br> <a href="/exhibition">작품전시페이지</a>
+            <br> <a href="/recruit_internship_list">채용인턴십페이지</a>
         </body>
         </html>
         `;
@@ -56,17 +57,20 @@ app.use("/exhibition_edit", require("./routes/exhibition_edit"));
 app.get("/extra_review_list", require("./routes/extra_review_list"));
 app.get("/extra_review_write", require("./routes/extra_review"));
 app.post("/extra_review_write", require("./routes/extra_review"));
-app.get(
-  "/extra_review_detail/:review_no",
-  require("./routes/extra_review_detail")
-);
-app.use("/auth", require("./routes/auth"));
+
+app.get("/extra_review_detail/:review_no",require("./routes/extra_review_detail"));
+
 
 //취업 후기 글
 app.get("/job_review_list", require("./routes/job_review_list"));
 app.get("/job_review_write", require("./routes/job_review"));
 app.post("/job_review_write", require("./routes/job_review"));
 app.get("/job_review_detail/:review_no", require("./routes/job_review_detail"));
+
+app.use('/recruit_internship', require('./routes/recruit_internship'));
+app.use('/recruit_internship_list', require('./routes/recruit_internship_list'));
+app.use('/recruit_internship_detail', require('./routes/recruit_internship_detail'));
+app.use('/download', require('./routes/download'));
 
 //교육/공모전 글
 app.get("/edu_contest_list", require("./routes/edu_contest_list"));
