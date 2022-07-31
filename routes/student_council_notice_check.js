@@ -4,11 +4,11 @@ const passport = require("../config/passport.js");
 const pool = require("../db.js");
 const templates = require("../lib/templates");
 
-router.get("/student_council_notice_check", async (req, res) => {
+router.get("/", async (req, res) => {
     const title = "학생회 공지 모아보기";
     const head = ``;
     const body = `
-    <form action="/student_council_notice_check" method ="post">
+    <form action="/api/student_council_notice_check" method ="post">
     <p>${req.user.name}</p>
     <label> 비밀번호: 
         <input type = "password" name = "sc_password" placeholder = "비밀번호를 입력하세요" /> </label>
@@ -21,17 +21,17 @@ router.get("/student_council_notice_check", async (req, res) => {
     res.send(html);
 });
 
-router.post("/student_council_notice_check", async (req, res) => {
+router.post("/", async (req, res) => {
     const post = req.body;
     const sc_password = post.sc_password;
 
     if(sc_password.length > 0){
         if(sc_password == process.env.STUDENT_COUNCIL_PASSWORD) {
-            res.redirect(`/student_council_notice_write`);
+            res.redirect(`/api/student_council_notice/post`);
         }
         else {
             res.write(`<script type="text/javascript">alert('password does not correct!')</script>`);
-            res.write('<script>window.location="/student_council_notice_list"</script>')
+            res.write('<script>window.location="/api/student_council_notice_list"</script>')
         }
     }
     else {

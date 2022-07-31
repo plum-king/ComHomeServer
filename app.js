@@ -79,33 +79,13 @@ app.use("/api/edu_contest_write", require("./routes/edu_contest"));
 app.use("/api/edu_contest_detail", require("./routes/edu_contest_detail"));
 
 //교육/공모전 댓글
-app.post("/api/edu_cont_comment_write", require("./routes/edu_cont_comment"));
+app.use("/api/edu_cont_comment_write", require("./routes/edu_cont_comment"));
 
 //학생회 공지 글 >>/api로 경로 아직 안바꿈..!!!! app.use로 다 바꾸기!!
-app.get(
-  "/student_council_notice_list",
-  require("./routes/student_council_notice_list")
-);
-app.get(
-  "/student_council_notice_check",
-  require("./routes/student_council_notice_check")
-);
-app.post(
-  "/student_council_notice_check",
-  require("./routes/student_council_notice_check")
-);
-app.get(
-  "/student_council_notice_write",
-  require("./routes/student_council_notice")
-);
-app.post(
-  "/student_council_notice_write",
-  require("./routes/student_council_notice")
-);
-app.get(
-  "/student_council_notice_detail/:sc_notice_no",
-  require("./routes/student_council_notice_detail")
-);
+app.use("/api/student_council_notice_list", require("./routes/student_council_notice_list"));
+app.use("/api/student_council_notice_check", require("./routes/student_council_notice_check"));
+app.use("/api/student_council_notice", require("./routes/student_council_notice"));
+app.use("/api/student_council_notice_detail", require("./routes/student_council_notice_detail"));
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);

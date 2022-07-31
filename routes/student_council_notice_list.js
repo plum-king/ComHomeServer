@@ -19,27 +19,27 @@ function date_to_str(format) {
     return year + "-" + month + "-" + date + " " + hour + ":" + min + ":" + sec;
 }
 
-router.get("/student_council_notice_list", async (req, res) => {
+router.get("/", async (req, res) => {
     const title = "학생회 공지";
     const head = ``;
-    let body = `게시글 제목 | 작성 날짜<br>`;
-
+    let body = `게시글 넘버 | 게시글 제목 | 조회수 | 작성 날짜 <br>`;
     let i = 0;
     const data = await pool.query(
-    `SELECT * FROM student_council_notice ORDER BY upload_time DESC`
+    `SELECT * FROM student_council_notice ORDER BY sc_created_date DESC`
     );
+    const time_data = await pool.query(`SELECT date_format(sc_created_date, '%Y-%m-%d') FROM student_council_notice ORDER BY sc_created_date DESC`);
     let data_det = data[0];
 
     while (i < data_det.length) {
         const data2 = await pool.query(`SELECT name FROM user where iduser = ?`, [
         data_det[i].iduser,
         ]);
-        let timestamp = data_det[i].upload_time;
-        let upload_time = date_to_str(timestamp);
-        body += `<a href = "/student_council_notice_detail/${data_det[i].sc_notice_no}"><div>${data_det[i].sc_notice_title}| ${upload_time}<br></div></a> `;
+        let timestamp = data_det[i].sc_created_date;
+        let sc_created_date = date_to_str(timestamp);
+        body += `<a href = "/api/student_council_notice_detail/${data_det[i].sc_notice_no}">${data_det.length-i}</a> | ${data_det[i].sc_notice_title} | ${data_det[i].sc_views} | ${time_data[0][i]["date_format(sc_created_date, '%Y-%m-%d')"]} <br>`;
         i++;
     }
-    body += `<br><a href = "/student_council_notice_check">학생회 공지 작성하기</a> <br> <a href="/"> 홈으로 돌아가기 </a>`;
+    body += `<br><a href = "/api/student_council_notice_check">학생회 공지 작성하기</a> <br> <a href="/"> 홈으로 돌아가기 </a>`;
     var html = templates.HTML(title, head, body);
     res.send(html);
 });
