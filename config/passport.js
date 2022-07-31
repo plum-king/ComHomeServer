@@ -17,7 +17,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: "/auth/google/callback",
+      callbackURL: "/api/auth/google/callback",
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
@@ -44,6 +44,7 @@ passport.use(
 
           if (result.length == 1) {
             //로그인
+            //console.log(result);
             //user.name = result[0].name;
             //user.email = result[0].email;
             // console.log("41행");
@@ -63,6 +64,7 @@ passport.use(
             // console.log("51행");
             return done(false);
           }
+          //console.log(user);
           return done(null, user); //user data 넘기기
         } catch (err) {
           console.error(err);

@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
   }
   else{
     res.write(`<script type="text/javascript">alert('Please Login First !!')</script>`);
-    res.write('<script>window.location="/auth/login"</script>');
+    res.write('<script>window.location="/api/auth/login"</script>');
   }
 
 });
@@ -61,7 +61,7 @@ router.post('/post', upload.single('img'), async (req, res) => {
         res.write(
             `<script type="text/javascript">alert('Exhibition Post Success !!')</script>`
           );
-        res.write(`<script>window.location="/exhibition"</script>`);
+        res.write(`<script>window.location="/api/exhibition"</script>`);
         res.end();
       } catch (err) {
         console.error(err);
@@ -80,7 +80,7 @@ const getPage = (title, description,auth,data)=>{
       <title>${title}</title>
   </head>
   <body>
-      ${auth.name} | <a href="/exhibition/post">작품전시작성</a>
+      ${auth.name} | <a href="/api/exhibition/post">작품전시작성</a>
       <h1>${title}</h1>
       <p>${description}</p>
       <hr>`
@@ -88,12 +88,12 @@ const getPage = (title, description,auth,data)=>{
       for(let i=0; i < data.length; i++) {
         if(auth.id==data[i].userid){
           htmlbody+=`
-          <form action="/exhibition_edit" method="post">
+          <form action="/api/exhibition_edit" method="post">
           <input type="hidden" name="id" value="${data[i].idexhibition}">
           <input type="submit" name="edit" value="수정하기">
           </form>
 
-          <form action="/exhibition_edit/delete" method="post">
+          <form action="/api/exhibition_edit/delete" method="post">
           <input type="hidden" name="id" value="${data[i].idexhibition}">
           <input type="submit" name="delete" value="삭제하기"
           onClick="return confirm('Are you sure you want to delete this exhibition?')">
@@ -131,7 +131,7 @@ const postPage=(description)=>{
     </head>
     <body>
         <p>${description}</p>
-    <form action="/exhibition/post" method="post" enctype="multipart/form-data">
+    <form action="/api/exhibition/post" method="post" enctype="multipart/form-data">
     <table>
         <tr>
         <td>프로젝트 제목: </td>

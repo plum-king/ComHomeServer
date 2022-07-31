@@ -12,7 +12,7 @@ router.post("/", async (req, res, next) => {
     const title = "작품전시 글 수정";
     const head = ``;
     let body = `
-    <form action="/exhibition_edit/update" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
+    <form action="/api/exhibition_edit/update" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
 
     <table>
     <tr>
@@ -108,7 +108,7 @@ const upload = multer({
         res.write(
             `<script type="text/javascript">alert('Exhibition Edit Success !!')</script>`
           );
-        res.write(`<script>window.location="/exhibition"</script>`);
+        res.write(`<script>window.location="/api/exhibition"</script>`);
         res.end();
       } catch (err) {
         console.error(err);
@@ -128,7 +128,7 @@ const upload = multer({
         res.write(
             `<script type="text/javascript">alert('Exhibition Delete Success !!')</script>`
           );
-        res.write(`<script>window.location="/exhibition"</script>`);
+        res.write(`<script>window.location="/api/exhibition"</script>`);
         res.end();
       } catch (err) {
         console.error(err);
