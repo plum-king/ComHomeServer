@@ -9,8 +9,12 @@ router.get("/extra_review_list", async (req, res) => {
   const head = ``;
   let body = `게시글 순서 | 게시글 제목 | 작성 날짜 <br>`;
   let i = 0;
-  const data = await pool.query(`SELECT * FROM extra_review ORDER BY review_no DESC`);
-  const time_data = await pool.query(`SELECT date_format(upload_time, '%Y-%m-%d %H:%i:%s') FROM extra_review`);
+  const data = await pool.query(
+    `SELECT * FROM extra_review ORDER BY review_no DESC`
+  );
+  const time_data = await pool.query(
+    `SELECT date_format(upload_time, '%Y-%m-%d %H:%i:%s') FROM extra_review`
+  );
   let data_det = data[0];
 
   while (i < data_det.length) {
