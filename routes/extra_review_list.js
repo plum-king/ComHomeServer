@@ -4,7 +4,7 @@ const passport = require("../config/passport.js");
 const pool = require("../db.js");
 const templates = require("../lib/templates");
 
-router.get("/extra_review_list", async (req, res) => {
+router.get("/", async (req, res) => {
   const title = "대외활동 후기 게시판";
   const head = ``;
   let body = `게시글 순서 | 게시글 제목 | 작성 날짜 <br>`;
@@ -22,10 +22,10 @@ router.get("/extra_review_list", async (req, res) => {
       data_det[i].iduser,
     ]);
     // console.log(data2[0][0].name);
-    body += `<a href = "/extra_review_detail/${data_det[i].review_no}">${data_det[i].review_no}</a> | ${data_det[i].review_title} | ${time_data[0][i]["date_format(upload_time, '%Y-%m-%d %H:%i:%s')"]} <br>`;
+    body += `<a href = "/api/extra_review_detail/${data_det[i].review_no}">${data_det[i].review_no}</a> | ${data_det[i].review_title} | ${time_data[0][i]["date_format(upload_time, '%Y-%m-%d %H:%i:%s')"]} <br>`;
     i++;
   }
-  body += `<a href = "/extra_review_write">대외활동 후기글 작성하러 가기</a>`;
+  body += `<a href = "/api/extra_review_write">대외활동 후기글 작성하러 가기</a>`;
   var html = templates.HTML(title, head, body);
   res.send(html);
 });

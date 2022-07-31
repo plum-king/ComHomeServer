@@ -21,10 +21,10 @@ router.get("/", async (req, res) => {
         data_det[i].user_id,
       ]);
       // console.log(data2[0][0].name);
-      body += `<a href = "/recruit_internship_detail/${data_det[i].notice_id}">${data_det.length-i}</a> | ${data_det[i].not_title} | ${data_det[i].not_views} | ${time_data[0][i]["date_format(not_created_date, '%Y-%m-%d')"]} <br>`;
+      body += `<a href = "/api/recruit_internship_detail/${data_det[i].notice_id}">${data_det.length-i}</a> | ${data_det[i].not_title} | ${data_det[i].not_views} | ${time_data[0][i]["date_format(not_created_date, '%Y-%m-%d')"]} <br>`;
       i++;
     }
-    body += `<br><a href = "/recruit_internship/post">채용인턴십 글 작성하기</a>`;
+    body += `<br><a href = "/api/recruit_internship/post">채용인턴십 글 작성하기</a>`;
     var html = templates.HTML(title, head, body);
     res.send(html);
   });

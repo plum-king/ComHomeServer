@@ -27,7 +27,7 @@ app.get("/", async (req, res) => {
 //프론트 임시로->url 바로 들어가도 된다.
 const getBtn = (user) => {
   return user !== undefined
-    ? `${user.name} | <a href="/auth/logout">logout</a> <br><br> <a href = "/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/student_council_notice_list">학생회 공지</a>`
+    ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/api/student_council_notice_list">학생회 공지</a>`
     : `<a href="/api/auth/google">Google Login</a>`;
 };
 
@@ -57,16 +57,15 @@ const getPage = (title, description, auth) => {
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/exhibition", require("./routes/exhibition"));
 app.use("/api/exhibition_edit", require("./routes/exhibition_edit"));
-app.get("/api/extra_review_list", require("./routes/extra_review_list"));
-app.get("/api/extra_review_write", require("./routes/extra_review"));
-app.post("/api/extra_review_write", require("./routes/extra_review"));
-app.get("/api/extra_review_detail/:review_no", require("./routes/extra_review_detail"));
+
+app.use("/api/extra_review_list", require("./routes/extra_review_list"));
+app.use("/api/extra_review_write", require("./routes/extra_review"));
+app.use("/api/extra_review_detail", require("./routes/extra_review_detail"));
 
 //취업 후기 글
-app.get("/api/job_review_list", require("./routes/job_review_list"));
-app.get("/api/job_review_write", require("./routes/job_review"));
-app.post("/api/job_review_write", require("./routes/job_review"));
-app.get("/api/job_review_detail/:review_no", require("./routes/job_review_detail"));
+app.use("/api/job_review_list", require("./routes/job_review_list"));
+app.use("/api/job_review_write", require("./routes/job_review"));
+app.use("/api/job_review_detail", require("./routes/job_review_detail"));
 
 //채용인턴십 글
 app.use('/api/recruit_internship', require('./routes/recruit_internship'));
@@ -75,10 +74,9 @@ app.use('/api/recruit_internship_detail', require('./routes/recruit_internship_d
 app.use('/api/download', require('./routes/download'));
 
 //교육/공모전 글
-app.get("/api/edu_contest_list", require("./routes/edu_contest_list"));
-app.get("/api/edu_contest_write", require("./routes/edu_contest"));
-app.post("/api/edu_contest_write", require("./routes/edu_contest"));
-app.get("/api/edu_contest_detail/:edu_contest_no", require("./routes/edu_contest_detail"));
+app.use("/api/edu_contest_list", require("./routes/edu_contest_list"));
+app.use("/api/edu_contest_write", require("./routes/edu_contest"));
+app.use("/api/edu_contest_detail", require("./routes/edu_contest_detail"));
 
 //교육/공모전 댓글
 app.post("/api/edu_cont_comment_write", require("./routes/edu_cont_comment"));

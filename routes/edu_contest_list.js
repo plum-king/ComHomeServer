@@ -19,7 +19,7 @@ function date_to_str(format) {
   return year + "-" + month + "-" + date + " " + hour + ":" + min + ":" + sec;
 }
 
-router.get("/edu_contest_list", async (req, res) => {
+router.get("/", async (req, res) => {
   const title = "교육/공모전 게시판";
   const head = ``;
   let body = `게시글 제목 | 작성 날짜<br>`;
@@ -37,11 +37,11 @@ router.get("/edu_contest_list", async (req, res) => {
     let timestamp = data_det[i].upload_time;
     let upload_time = date_to_str(timestamp);
     // console.log(upload_time);
-    body += `<a href = "/edu_contest_detail/${data_det[i].edu_contest_no}"><div>${data_det[i].edu_contest_title}| ${upload_time}<br></div></a> `;
+    body += `<a href = "/api/edu_contest_detail/${data_det[i].edu_contest_no}"><div>${data_det[i].edu_contest_title}| ${upload_time}<br></div></a> `;
     //익명으로 얘기된 거면 제외 | ${data2[0][0].name}} <br>`;
     i++;
   }
-  body += `<br><a href = "/edu_contest_write">교육/공모전 글 작성하러 가기</a> <br> <a href="/"> 홈으로 돌아가기 </a>`;
+  body += `<br><a href = "/api/edu_contest_write">교육/공모전 글 작성하러 가기</a> <br> <a href="/"> 홈으로 돌아가기 </a>`;
   var html = templates.HTML(title, head, body);
   res.send(html);
 });

@@ -40,7 +40,7 @@ router.get("/:notice_id", async (req, res) => {
         //console.log(file_data[0][i]);
         //console.log(file_data[0][i].file_infoN);
         let filename=file_data[0][i].file_infoN.substr(8);
-        body +=`<a href = "/download/${filename}">${file_data[0][i].file_originN}</a><br>`;
+        body +=`<a href = "/api/download/${filename}">${file_data[0][i].file_originN}</a><br>`;
         }
     }else{
         body +=`<p>첨부파일이(가) 없습니다.</p>`
@@ -51,7 +51,7 @@ router.get("/:notice_id", async (req, res) => {
     <img src="${data[0][0].not_img}" />
     </div>
     <p>내용: ${data[0][0].not_content}</p>
-    <a href = "/recruit_internship_list">목록으로 돌아가기</a>
+    <a href = "/api/recruit_internship_list">목록으로 돌아가기</a>
     `;
     var html = templates.HTML(title, head, body);
     res.send(html);

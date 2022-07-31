@@ -5,7 +5,7 @@ const pool = require("../db.js");
 const templates = require("../lib/templates");
 
 //댓글 저장
-router.post("/edu_cont_comment_write", async (req, res) => {
+router.post("/", async (req, res) => {
   let post = req.body;
   const user = req.user.id;
   const comment = post.edu_contest_comment_cont;
@@ -17,7 +17,7 @@ router.post("/edu_cont_comment_write", async (req, res) => {
       [comment, user, cont_no]
     );
     res.writeHead(302, {
-      Location: "/edu_contest_detail/" + cont_no,
+      Location: "/api/edu_contest_detail/" + cont_no,
     });
     res.end();
   } catch (err) {

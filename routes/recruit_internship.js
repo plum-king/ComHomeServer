@@ -9,13 +9,13 @@ const path = require('path');
 router.get("/post", async (req, res) => {
     if(!req.user) {
       res.write(`<script type="text/javascript">alert('Please Login First !!')</script>`);
-      res.write(`<script>window.location="/auth/login"</script>`);
+      res.write(`<script>window.location="/api/auth/login"</script>`);
       res.end();
     }
     const title = "채용인턴십 글 작성";
     const head = ``;
     const body = `
-    <form action="/recruit_internship/post" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
+    <form action="/api/recruit_internship/post" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
     <b>채용인턴십 공지 작성</b>
     <br>
     <label> 제목: 
@@ -87,7 +87,7 @@ const fileFields = upload.fields([
     try {
         const data = await pool.query(sql,params);
         res.write(`<script type="text/javascript">alert('Recruit Internship post Success !!')</script>`);
-        res.write(`<script>window.location="/recruit_internship_list"</script>`);
+        res.write(`<script>window.location="/api/recruit_internship_list"</script>`);
         res.end();
     } catch (err) {
         console.error(err);

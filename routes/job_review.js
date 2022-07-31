@@ -4,11 +4,11 @@ const passport = require("../config/passport.js");
 const pool = require("../db.js");
 const templates = require("../lib/templates");
 
-router.get("/job_review_write", async (req, res) => {
+router.get("/", async (req, res) => {
   const title = "취업 후기글 모아보기";
   const head = ``;
   const body = `
-  <form action="/job_review_write" method ="post">
+  <form action="/api/job_review_write" method ="post">
   <p>${req.user.name}</p>
   <label> 제목: 
     <input type = "text" name = "review_title" placeholder = "제목을 작성하세요" /> </label>
@@ -25,7 +25,7 @@ router.get("/job_review_write", async (req, res) => {
   res.send(html);
 });
 
-router.post("/job_review_write", async (req, res) => {
+router.post("/", async (req, res) => {
   const post = req.body;
   const title = post.review_title;
   const cont = post.review_cont;
@@ -36,7 +36,7 @@ router.post("/job_review_write", async (req, res) => {
       [title, cont, req.user.id]
     );
     // console.log("됐음");
-    res.redirect(`/job_review_detail/${data[0].insertId}`);
+    res.redirect(`/api/job_review_detail/${data[0].insertId}`);
   } catch (err) {
     console.error(err);
   }

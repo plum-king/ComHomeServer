@@ -5,7 +5,7 @@ const pool = require("../db.js");
 const templates = require("../lib/templates");
 const path = require("path");
 
-router.get("/edu_contest_detail/:edu_contest_no", async (req, res) => {
+router.get("/:edu_contest_no", async (req, res) => {
   const edu_contest_no = path.parse(req.params.edu_contest_no).base;
   //   console.log(edu_contest_no);
   const title = edu_contest_no + "번 게시글";
@@ -54,7 +54,7 @@ router.get("/edu_contest_detail/:edu_contest_no", async (req, res) => {
   if (data[0][0].iduser == req.user.id) {
     comment_write = `자신의 게시글에는 댓글을 작성할 수 없습니다.`;
   } else {
-    comment_write += `<form class="comment" action="/edu_cont_comment_write" method="POST">
+    comment_write += `<form class="comment" action="/api/edu_cont_comment_write" method="POST">
         댓글 입력:
       
         <input name="edu_contest_comment_cont" placeholder="여기에 댓글을 입력해주세요"></input>
@@ -66,7 +66,7 @@ router.get("/edu_contest_detail/:edu_contest_no", async (req, res) => {
       </form>`;
   }
 
-  body += ` ${comment_write} <br> <a href = "/edu_contest_list">목록으로 돌아가기</a><br>  `;
+  body += ` ${comment_write} <br> <a href = "/api/edu_contest_list">목록으로 돌아가기</a><br>  `;
   var html = templates.HTML(title, head, body);
   res.send(html);
 });

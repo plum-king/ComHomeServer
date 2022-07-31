@@ -5,7 +5,7 @@ const pool = require("../db.js");
 const templates = require("../lib/templates");
 const path = require("path");
 
-router.get("/extra_review_detail/:review_no", async (req, res) => {
+router.get("/:review_no", async (req, res) => {
   if(!req.user.id) res.send("로그인이 필요한 서비스 입니다.");
 
   const review_no = path.parse(req.params.review_no).base;
@@ -18,7 +18,7 @@ router.get("/extra_review_detail/:review_no", async (req, res) => {
   );
   const body = `<p>${data[0][0].review_title}</p> 
   <p>${data[0][0].review_cont}</p>
-  <a href = "/extra_review_list">목록으로 돌아가기</a>
+  <a href = "/api/extra_review_list">목록으로 돌아가기</a>
   `;
   var html = templates.HTML(title, head, body);
   res.send(html);
