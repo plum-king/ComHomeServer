@@ -33,8 +33,10 @@ router.get("/:sc_notice_no", async (req, res) => {
     <p><b>=첨부파일=</b></p>
     `
 
-    if(file_data[0].length>0){
-        for(let i=0; i < file_data.length; i++) {
+    console.log(file_data[0][0].file_infoN.substr(8));
+
+    if(file_data[0].length > 0){
+        for(let i=0; i < file_data[0].length; i++) {
             let filename=file_data[0][i].file_infoN.substr(8);
             body +=`<a href = "/download/${filename}">${file_data[0][i].file_originN}</a><br>`;
         }

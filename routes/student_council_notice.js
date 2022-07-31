@@ -69,8 +69,8 @@ router.post("/post", fileFields, async (req, res) => {
     const cont = post.sc_notice_cont;
     const sc_notice_img = req.files.img == undefined ? '' : req.files.img[0].path;
     const sc_notice_file = req.files.file == undefined ? '' : req.files.file[0].path;
-    const sql=`INSERT INTO student_council_notice(sc_notice_no, sc_notice_title, sc_notice_cont, iduser, sc_created_date, sc_edited_date, sc_views, sc_img) VALUES(?,?,?,?,?,?,?,?)`
-    const params=[sc_notice_id, title, cont, req.user.id, date, date, 0, sc_notice_img];
+    const sql=`INSERT INTO student_council_notice(sc_notice_no, sc_notice_title, sc_notice_cont, iduser, sc_created_date, sc_edited_date, sc_views, sc_img, sc_file_status) VALUES(?,?,?,?,?,?,?,?,?)`
+    const params=[sc_notice_id, title, cont, req.user.id, date, date, 0, sc_notice_img, count > 0 ? 1 : 0];
 
     try {
         const data = await pool.query(sql,params);
@@ -84,7 +84,7 @@ router.post("/post", fileFields, async (req, res) => {
       //첨부파일 여러개 table에 저장
     for(let i=0;i<count;i++){
         try {
-            const data = await pool.query(`INSERT INTO file_sc(sc_notice_no, file_infoN, file_originN) VALUES(?,?,?)`,[sc_notice_no, req.files.file[i].path, file_originN]);
+            const data = await pool.query(`INSERT INTO file_sc(sc_notice_no, file_infoN, file_originN) VALUES(?,?,?)`,[sc_notice_id, req.files.file[i].path, req.files.file[i].originalname]);
         } catch (err) {
             console.error(err);
         }
