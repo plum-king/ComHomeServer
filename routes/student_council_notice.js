@@ -13,6 +13,7 @@ router.get("/post", async (req, res) => {
         res.write(`<script>window.location="/api/auth/login"</script>`);
         res.end();
     }
+    //
     const title = "학생회 공지글 작성";
     const head = ``;
     const body = `
@@ -20,11 +21,11 @@ router.get("/post", async (req, res) => {
         <b>학생회 공지 작성</b>
         <br>
         <label> 제목: 
-            <input type = "text" name = "sc_notice_title" placeholder = "제목을 작성하세요" /> </label>
+            <input type = "text" name = "title" placeholder = "제목을 작성하세요" /> </label>
         <br>
         <br>
         <label> 내용: 
-            <textarea name="sc_notice_cont" placeholder = "내용을 작성하세요"></textarea></label>
+            <textarea name="content" placeholder = "내용을 작성하세요"></textarea></label>
         <br>
         <label> 사진: 
             <input type='file' name='img' accept='image/jpg, image/png, image/jpeg' /></label>
@@ -65,12 +66,12 @@ router.post("/post", fileFields, async (req, res) => {
     const post = req.body;
     const date=new Date();
     const sc_notice_id=date % 10000;
-    const title = post.sc_notice_title;
-    const cont = post.sc_notice_cont;
+    const title = post.title;
+    const content = post.content;
     const sc_notice_img = req.files.img == undefined ? '' : req.files.img[0].path;
     const sc_notice_file = req.files.file == undefined ? '' : req.files.file[0].path;
-    const sql=`INSERT INTO student_council_notice(sc_notice_no, sc_notice_title, sc_notice_cont, iduser, sc_created_date, sc_edited_date, sc_views, sc_img, sc_file_status) VALUES(?,?,?,?,?,?,?,?,?)`
-    const params=[sc_notice_id, title, cont, req.user.id, date, date, 0, sc_notice_img, count > 0 ? 1 : 0];
+    const sql=`INSERT INTO student_council_notice(no, title, content, iduser, upload_time, edited_date, views, img, file_status) VALUES(?,?,?,?,?,?,?,?,?)`
+    const params=[sc_notice_id, title, content, req.user.id, date, date, 0, sc_notice_img, count > 0 ? 1 : 0];
 
     try {
         const data = await pool.query(sql,params);
@@ -84,7 +85,7 @@ router.post("/post", fileFields, async (req, res) => {
       //첨부파일 여러개 table에 저장
     for(let i=0;i<count;i++){
         try {
-            const data = await pool.query(`INSERT INTO file_sc(sc_notice_no, file_infoN, file_originN) VALUES(?,?,?)`,[sc_notice_id, req.files.file[i].path, req.files.file[i].originalname]);
+            const data = await pool.query(`INSERT INTO file_sc(no, file_infoN, file_originN) VALUES(?,?,?)`,[sc_notice_id, req.files.file[i].path, req.files.file[i].originalname]);
         } catch (err) {
             console.error(err);
         }
