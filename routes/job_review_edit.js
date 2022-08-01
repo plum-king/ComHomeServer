@@ -22,7 +22,7 @@ router.post("/:id", async (req, res, next) => {
     </tr>
     <tr>
     <td>취업후기글 소개(내용) :</td>
-    <td><textarea name="cont">${data[0][0].cont}</textarea></td>
+    <td><textarea name="cont">${data[0][0].content}</textarea></td>
     </tr>
     <tr>
     <input type="hidden" name="no" value="${data[0][0].no}">
@@ -41,7 +41,7 @@ router.post("/:id", async (req, res, next) => {
 router.post("/update/:id", async (req, res) => {
   const no = req.body.no;
   const title = req.body.title;
-  const cont = req.body.cont;
+  const cont = req.body.content;
 
   try {
     const sql1 = await pool.query(

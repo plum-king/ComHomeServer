@@ -84,6 +84,7 @@ app.use("/api/download", require("./routes/download"));
 app.use("/api/edu_contest_list", require("./routes/edu_contest_list"));
 app.use("/api/edu_contest_write", require("./routes/edu_contest"));
 app.use("/api/edu_contest_detail", require("./routes/edu_contest_detail"));
+app.use("/api/edu_contest_edit", require("./routes/edu_contest_edit"));
 
 //교육/공모전 댓글
 app.use("/api/edu_cont_comment_write", require("./routes/edu_cont_comment"));
