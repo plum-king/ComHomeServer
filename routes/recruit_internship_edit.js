@@ -19,14 +19,14 @@ router.post("/", async (req, res) => {
     <b>채용인턴십 공지 작성</b>
     <br>
     <label> 제목: 
-      <input type = "text" name = "notice_title" value="${data[0][0].not_title}"/> </label>
+      <input type = "text" name = "notice_title" value="${data[0][0].title}"/> </label>
       <br>
       <br>
       <label> 내용: 
-      <textarea name="notice_cont">${data[0][0].not_content}</textarea></label>
+      <textarea name="notice_cont">${data[0][0].content}</textarea></label>
       <br>
       `
-      if(data[0][0].not_img !=''){
+      if(data[0][0].img !=''){
         body+=`
         <script type="text/javascript">
             function div_hide() {
@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
         </script>
 
         <p>채용공지 이미지</p>
-        <img id='showImage' src="${data[0][0].not_img}"/>
+        <img id='showImage' src="${data[0][0].img}"/>
         <input type="button" id="deleteBtn" value="X(이미지삭제)" onclick="div_hide();"/>
         <input style="display:none;" type='file' id='addImage' name='img' accept='image/jpg, image/png, image/jpeg'/>
         `
@@ -91,11 +91,11 @@ const fileFields = upload.fields([
 
     //const exh_img = req.file == undefined ? '' : req.file.path;
 
-    const sql1 = "UPDATE recruit_intern SET not_title=?, not_content=?, not_edited_date=?, not_img=? WHERE no=?";
+    const sql1 = "UPDATE recruit_intern SET title=?, content=?, edited_date=?, img=? WHERE no=?";
     const params1 = [title, cont, date, notice_img, notice_id];
 
     //수정할때 이미지 추가 안한경우에는 update문에서 img 속성은 뺴야함
-    const sql2 = "UPDATE recruit_intern SET not_title=?, not_content=?, not_edited_date=? WHERE no=?";
+    const sql2 = "UPDATE recruit_intern SET title=?, content=?, edited_date=? WHERE no=?";
     const params2 = [title, cont, date, notice_id];
 
     //이미지 없으면 sql2 쿼리, 이미지 있으면 sql1 쿼리
@@ -133,11 +133,11 @@ const fileFields = upload.fields([
   //채용인턴십 글 삭제하기
   router.post("/delete", async (req, res) => {
     const notice_id=Number(req.body.id);
-    const file_status=await pool.query(`SELECT not_file_status FROM recruit_intern WHERE no=${notice_id}`);
+    const file_status=await pool.query(`SELECT file_status FROM recruit_intern WHERE no=${notice_id}`);
 
     if(file_status[0][0].not_file_status==1){
       //console.log('첨부파일 존재함.->삭제하기');
-      const data = await pool.query(`DELETE FROM file_intern WHERE notice_id=?`,[notice_id]);
+      const data = await pool.query(`DELETE FROM file_intern WHERE no=?`,[notice_id]);
     }
 
     const sql = `DELETE FROM recruit_intern WHERE no=?`;
