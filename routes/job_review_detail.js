@@ -24,7 +24,7 @@ router.get("/:review_no", async (req, res) => {
   }
 
   let body = `<p>${data[0][0].title}</p> 
-  <p>${data[0][0].cont}</p>`;
+  <p>${data[0][0].content}</p>`;
   if (req.user.id == data[0][0].iduser) {
     body += `<form action="/api/job_review_edit/${review_no}" method="post">
     <input type="hidden" name="no" value="${review_no}">
