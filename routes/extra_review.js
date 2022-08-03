@@ -31,8 +31,9 @@ router.post("/", async (req, res) => {
   const cont = post.review_cont;
   try {
     const data = await pool.query(
-      `INSERT INTO extra_review(review_title, review_cont, iduser) VALUES(?, ?, ?)`,
-      [title, cont, req.user.id]
+      `INSERT INTO extra_review(title, content, iduser) VALUES(?, ?, ?)`[
+        (title, cont, req.user.id)
+      ]
     );
     const head = ``;
     const body = `
@@ -41,7 +42,7 @@ router.post("/", async (req, res) => {
 
     <a href="/api/extra_review_list">목록으로 돌아가기</a>
     `;
-  
+
     var html = templates.HTML(title, head, body);
     res.send(html);
   } catch (err) {

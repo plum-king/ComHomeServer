@@ -11,11 +11,11 @@ router.get("/", async (req, res) => {
   <form action="/api/job_review_write" method ="post">
   <p>${req.user.name}</p>
   <label> 제목: 
-    <input type = "text" name = "review_title" placeholder = "제목을 작성하세요" /> </label>
+    <input type = "text" name = "title" placeholder = "제목을 작성하세요" /> </label>
     <br>
     <br>
     <label> 내용: 
-    <input type = "textarea" name = "review_cont" placeholder = "내용을 작성하세요" /> </label>
+    <input type = "textarea" name = "content" placeholder = "내용을 작성하세요" /> </label>
     <br>
     <button type="submit"><b>입력</b></button>
     </form>
@@ -27,15 +27,14 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const post = req.body;
-  const title = post.review_title;
-  const cont = post.review_cont;
+  const title = post.title;
+  const content = post.content;
   //   const time = new Date().getTime().valueOf(); // 현재 시간
   try {
     const data = await pool.query(
-      `INSERT INTO job_review(review_title, review_cont, iduser) VALUES(?, ?, ?)`,
-      [title, cont, req.user.id]
+      `INSERT INTO job_review(title, content, iduser) VALUES(?, ?, ?)`,
+      [title, content, req.user.id]
     );
-    // console.log("됐음");
     res.redirect(`/api/job_review_detail/${data[0].insertId}`);
   } catch (err) {
     console.error(err);

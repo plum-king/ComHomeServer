@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
     let timestamp = data_det[i].upload_time;
     let upload_time = date_to_str(timestamp);
     // console.log(upload_time);
-    body += `<a href = "/api/edu_contest_detail/${data_det[i].edu_contest_no}"><div>${data_det[i].edu_contest_title}| ${upload_time}<br></div></a> `;
+    body += `<a href = "/api/edu_contest_detail/${data_det[i].no}"><div>${data_det[i].title}| ${upload_time}<br></div></a> `;
     //익명으로 얘기된 거면 제외 | ${data2[0][0].name}} <br>`;
     i++;
   }
