@@ -4,19 +4,30 @@ const passport = require("../config/passport.js");
 const pool = require("../db.js");
 const templates = require("../lib/templates");
 const path = require("path");
+const multer = require("multer");
 
 router.get("/:edu_contest_no", async (req, res) => {
   const edu_contest_no = path.parse(req.params.edu_contest_no).base;
-  //   console.log(edu_contest_no);
+  console.log(edu_contest_no);
   const title = edu_contest_no + "번 게시글";
   const head = ``;
-  const data = await pool.query(
-    `SELECT * FROM edu_contest where edu_contest_no = ?`,
-    [edu_contest_no]
-  );
+  const data = await pool.query(`SELECT * FROM edu_contest where no = ?`, [
+    edu_contest_no,
+  ]);
 
-  let body = `<p>${data[0][0].edu_contest_title}</p> 
-  <p>${data[0][0].edu_contest_cont}</p>
+  let body = `<p>${data[0][0].title}</p> 
+  <p>${data[0][0].content}</p>
+  <img src = ${data[0][0].img}> 
+  <form action="/api/edu_contest_edit" method="post">
+    <input type="hidden" name="no" value="${data[0][0].no}" />
+    <input type="submit" name="edit" value="수정하기" />
+  </form>
+
+  <form action="/api/edu_contest_edit/delete" method="post">
+    <input type="hidden" name="no" value="${data[0][0].no}" />
+    <input type="submit" name="delete" value="삭제하기"
+      onClick="return confirm('Are you sure you want to delete this exhibition?')" />
+  </form>
   <strong>댓글</strong><br>
   `;
 
