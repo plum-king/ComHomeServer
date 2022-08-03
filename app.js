@@ -69,16 +69,11 @@ app.use("/api/job_review_detail", require("./routes/job_review_detail"));
 app.use("/api/job_review_edit", require("./routes/job_review_edit"));
 
 //채용인턴십 글
-app.use("/api/recruit_internship", require("./routes/recruit_internship"));
-app.use(
-  "/api/recruit_internship_list",
-  require("./routes/recruit_internship_list")
-);
-app.use(
-  "/api/recruit_internship_detail",
-  require("./routes/recruit_internship_detail")
-);
-app.use("/api/download", require("./routes/download"));
+app.use('/api/recruit_internship', require('./routes/recruit_internship'));
+app.use('/api/recruit_internship_list', require('./routes/recruit_internship_list'));
+app.use('/api/recruit_internship_detail', require('./routes/recruit_internship_detail'));
+app.use('/api/recruit_internship_edit', require('./routes/recruit_internship_edit'));
+app.use('/api/download', require('./routes/download'));
 
 //교육/공모전 글
 app.use("/api/edu_contest_list", require("./routes/edu_contest_list"));
