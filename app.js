@@ -89,23 +89,12 @@ app.use("/api/edu_contest_edit", require("./routes/edu_contest_edit"));
 //교육/공모전 댓글
 app.use("/api/edu_cont_comment_write", require("./routes/edu_cont_comment"));
 
-//학생회 공지 글 >>/api로 경로 아직 안바꿈..!!!! app.use로 다 바꾸기!!
-app.use(
-  "/api/student_council_notice_list",
-  require("./routes/student_council_notice_list")
-);
-app.use(
-  "/api/student_council_notice_check",
-  require("./routes/student_council_notice_check")
-);
-app.use(
-  "/api/student_council_notice",
-  require("./routes/student_council_notice")
-);
-app.use(
-  "/api/student_council_notice_detail",
-  require("./routes/student_council_notice_detail")
-);
+//학생회 공지 글 
+app.use("/api/student_council_notice_list", require("./routes/student_council_notice_list"));
+app.use("/api/student_council_notice_check", require("./routes/student_council_notice_check"));
+app.use("/api/student_council_notice", require("./routes/student_council_notice"));
+app.use("/api/student_council_notice_detail", require("./routes/student_council_notice_detail"));
+app.use("/api/student_council_notice_edit", require("./routes/student_council_notice_edit"));
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
