@@ -63,7 +63,7 @@ const fileFields = upload.fields([
     //console.log(img);
     //console.log(file);
 
-    let count;
+    let count;  //파일개수
     if(req.files.file){
       count=Object.keys(file).length;
     }
@@ -76,13 +76,10 @@ const fileFields = upload.fields([
     const notice_img = req.files.img == undefined ? '' : req.files.img[0].path;
     const notice_file = req.files.file == undefined ? '' : req.files.file[0].path;
 
-    console.log('74행');
-    //console.log(notice_img);
-    //console.log(req.files.file[0].path);
-    //console.log(req.files.file[1].path);
+    //console.log('74행');
 
-    const sql=`INSERT INTO recruit_intern(notice_id, user_id, not_title, not_content, not_created_date, not_edited_date, not_views, not_img) VALUES(?,?,?,?,?,?,?,?)`
-    const params=[notice_id, req.user.id, title, cont, date, date, 0, notice_img];
+    const sql=`INSERT INTO recruit_intern(no, user_id, not_title, not_content, not_created_date, not_edited_date, not_views, not_img, not_file_status) VALUES(?,?,?,?,?,?,?,?,?)`
+    const params=[notice_id, req.user.id, title, cont, date, date, 0, notice_img, count >0 ? 1 :0 ]; //count >0 ? 1 :0 -> 첨부파일 여부확인
 
     try {
         const data = await pool.query(sql,params);
@@ -93,10 +90,10 @@ const fileFields = upload.fields([
         console.error(err);
         res.write('<script>window.location="/"</script>');
     }
-    //첨부파일 여러개 table에 저장
+    //첨부파일 table에 저장
     for(let i=0;i<count;i++){
       try {
-        const data = await pool.query(`INSERT INTO file_intern(notice_id, file_infoN, file_originN) VALUES(?,?,?)`,[notice_id, req.files.file[i].path, file_originN]);
+        const data = await pool.query(`INSERT INTO file_intern(notice_id, file_infoN, file_originN) VALUES(?,?,?)`,[notice_id, req.files.file[i].path, req.files.file[i].originalname]);
       } catch (err) {
         console.error(err);
       }

@@ -22,7 +22,7 @@ router.get("/:notice_id", async (req, res) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">`;
 
     const data = await pool.query(`SELECT * FROM recruit_intern where no = ?`,[notice_id]);
-    const file_data = await pool.query(`SELECT * FROM file_intern where notice_id = ?`,[notice_id]);
+    const file_data = await pool.query(`SELECT * FROM file_intern where no = ?`,[notice_id]);
     const time_data = await pool.query(`SELECT date_format(not_created_date, '%Y-%m-%d') FROM recruit_intern`);
     const time_data2 = await pool.query(`SELECT date_format(not_edited_date, '%Y-%m-%d') FROM recruit_intern`);
     //console.log(data[0][0].not_img);
@@ -46,6 +46,23 @@ router.get("/:notice_id", async (req, res) => {
     }else{
         body +=`<p>첨부파일이(가) 없습니다.</p>`
     }
+        //수정하기 + 삭제하기 버튼
+        if(req.user){
+            if(req.user.id==data[0][0].user_id){
+                body +=`
+                <form action="/api/recruit_internship_edit" method="post">
+                <input type="hidden" name="id" value="${notice_id}">
+                <input type="submit" name="edit" value="수정하기">
+                </form>
+    
+                <form action="/api/recruit_internship_edit/delete" method="post">
+                <input type="hidden" name="id" value="${notice_id}">
+                <input type="submit" name="edit" value="삭제하기"
+                onClick="return confirm('Are you sure you want to delete this notice?')">
+                </form>
+                `
+            }
+        }
 
     body+=`
     <hr>
