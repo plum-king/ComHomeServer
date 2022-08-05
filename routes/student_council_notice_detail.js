@@ -7,9 +7,6 @@ const path = require("path");
 
 router.get("/:no", async (req, res) => {
     const no = Number(path.parse(req.params.no).base);
-    console.log(no);
-
-    const sc_data = await pool.query(`SELECT * FROM student_council_notice where no = ?`, [no]);
 
     //조회수 +1
     try {
@@ -24,14 +21,16 @@ router.get("/:no", async (req, res) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">`;
     const data = await pool.query(`SELECT * FROM student_council_notice where no = ?`, [no]);
     const file_data = await pool.query(`SELECT * FROM file_sc where no = ?`,[no]);
-    const time_data = await pool.query(`SELECT date_format(upload_time, '%Y-%m-%d') FROM student_council_notice`);
-    const time_data2 = await pool.query(`SELECT date_format(edited_date, '%Y-%m-%d') FROM student_council_notice`);
-
+    const time_data = await pool.query(`SELECT date_format(upload_time, '%Y-%m-%d') FROM student_council_notice where no = ?`, [no]);
+    const time_data2 = await pool.query(`SELECT date_format(edited_date, '%Y-%m-%d') FROM student_council_notice where no = ?`, [no]);
+    
     let body = `<p>제목: ${data[0][0].title}</p>
     <p>작성일: ${time_data[0][0]["date_format(upload_time, '%Y-%m-%d')"]}</p>
     <p>수정일: ${time_data2[0][0]["date_format(edited_date, '%Y-%m-%d')"]}</p>
     <p>조회수: ${data[0][0].views}</p>
     <p>글번호: ${no}</p>
+    <p>시작날짜: ${data[0][0].start_date}</p>
+    <p>종료날짜: ${data[0][0].end_date}</p>
     <p><b>=첨부파일=</b></p>
     `
 

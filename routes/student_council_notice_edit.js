@@ -7,7 +7,6 @@ const path = require('path');
 
 // 글 수정하기
 router.post("/", async (req, res, next) => {
-    console.log(req.body.no);
     const data = await pool.query(`SELECT * FROM student_council_notice WHERE no=${req.body.no}`);
     const title = "학생회 공지 수정";
     const head = ``;
@@ -21,6 +20,12 @@ router.post("/", async (req, res, next) => {
         <br>
         <label> 내용: 
             <textarea name="content">${data[0][0].content}</textarea></label>
+        <br>
+        <label> 시작 날짜: 
+            <input type = "date" name = "start_date" value="${data[0][0].start_date}"/></label>
+        <br>
+        <label> 종료 날짜: 
+            <input type = "date" name = "end_date" value = "${data[0][0].end_date}"/></label>
         <br>
         <label> 파일: 
             <input type='file' name='file' multiple/></label>
@@ -72,25 +77,20 @@ const upload = multer({
 
 //수정한 글 db에 저장
 router.post("/update", upload.single('img'), async (req, res) => {
-
-    // let count;
-    // if(req.file){
-    //     count=Object.keys(file).length;
-    // }
-    // console.log(count);
     const no=Number(req.body.no);
     const title=req.body.title;
     const content=req.body.content;
+    const start_date=req.body.start_date;
+    const end_date=req.body.end_date;
     const date=new Date();
     const img = req.file == undefined ? '' : req.file.path;
-    // const file = req.file == undefined ? '' : req.file.originalname;
 
     //, file_status=? 
-    const sql1 = "UPDATE student_council_notice SET title=?, content=?, edited_date=? WHERE no=?";
-    const params1 = [title, content, date, no];
+    const sql1 = "UPDATE student_council_notice SET title=?, content=?, edited_date=?, start_date=?, end_date=? WHERE no=?";
+    const params1 = [title, content, date, start_date, end_date, no];
     //, file_status=? 
-    const sql2 = "UPDATE student_council_notice SET title=?, content=?, img=?, edited_date=? WHERE no=?";
-    const params2 = [title, content, img, date, no];
+    const sql2 = "UPDATE student_council_notice SET title=?, content=?, img=?, edited_date=?, start_date=?, end_date=? WHERE no=?";
+    const params2 = [title, content, img, date, start_date, end_date, no];
 
     //이미지 없으면 sql2 쿼리, 이미지 있으면 sql1 쿼리
     let sql=req.file==undefined? sql2 : sql1;
@@ -112,7 +112,6 @@ router.post("/update", upload.single('img'), async (req, res) => {
 
   //작품전시 글 삭제하기
 router.post("/delete", async (req, res) => {
-    //console.log(req.body);
     const no=Number(req.body.no);
     const file_status=await pool.query(`SELECT file_status FROM student_council_notice WHERE no=${no}`);
 

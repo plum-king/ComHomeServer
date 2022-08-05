@@ -23,9 +23,14 @@ router.get("/post", async (req, res) => {
         <label> 제목: 
             <input type = "text" name = "title" placeholder = "제목을 작성하세요" /> </label>
         <br>
-        <br>
         <label> 내용: 
             <textarea name="content" placeholder = "내용을 작성하세요"></textarea></label>
+        <br>
+        <label> 시작 날짜: 
+        <input type = "date" name = "start_date"/> </label>
+        <br>
+        <label> 종료 날짜: 
+        <input type = "date" name = "end_date"/> </label>
         <br>
         <label> 사진: 
             <input type='file' name='img' accept='image/jpg, image/png, image/jpeg' /></label>
@@ -70,8 +75,10 @@ router.post("/post", fileFields, async (req, res) => {
     const content = post.content;
     const sc_notice_img = req.files.img == undefined ? '' : req.files.img[0].path;
     const sc_notice_file = req.files.file == undefined ? '' : req.files.file[0].path;
-    const sql=`INSERT INTO student_council_notice(no, title, content, iduser, upload_time, edited_date, views, img, file_status) VALUES(?,?,?,?,?,?,?,?,?)`
-    const params=[sc_notice_id, title, content, req.user.id, date, date, 0, sc_notice_img, count > 0 ? 1 : 0];
+    const start_date = post.start_date;
+    const end_date = post.end_date
+    const sql=`INSERT INTO student_council_notice(no, title, content, iduser, upload_time, edited_date, views, img, file_status, start_date, end_date) VALUES(?,?,?,?,?,?,?,?,?,?,?)`
+    const params=[sc_notice_id, title, content, req.user.id, date, date, 0, sc_notice_img, count > 0 ? 1 : 0, start_date, end_date];
 
     try {
         const data = await pool.query(sql,params);
