@@ -28,7 +28,23 @@ router.get("/:edu_contest_no", async (req, res) => {
     <input type="hidden" name="no" value="${data[0][0].no}" />
     <input type="submit" name="delete" value="삭제하기"
       onClick="return confirm('Are you sure you want to delete this post?')" />
-  </form>`;
+  </form>
+  
+  <form action="/api/edu_contest_write/expire" method="post">
+
+  <script type="text/javascript">
+        function is_con_exp_time() {
+          const ch = document.getElementById("con_exp_time");
+          const is_checked = ch.checked;
+          document.getElementById('con_exp_time').value = is_checked;
+        }
+    </script>
+  <input type="hidden" name="no" value="${data[0][0].no}" />
+  <input type='radio' id='con_exp_time' name='con_exp_time' onclick="is_con_exp_time();" value="" /> 현재를 마감으로
+  <input type="submit" name="delete" value="마감"
+    onClick="return confirm('모집을 마감하시겠습니까?')" />
+  </form>
+  `;
   }
   body += `<strong>댓글</strong><br>
   `;

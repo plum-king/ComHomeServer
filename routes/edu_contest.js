@@ -71,4 +71,25 @@ router.post("/", upload.single("img"), async (req, res) => {
   }
 });
 
+router.post("/expire", async (req, res) => {
+  const post = req.body;
+  const post_no = post.no;
+  const con_exp_time = post.con_exp_time ? 1 : 0;
+  const now = new Date();
+  try {
+    if (con_exp_time) {
+      const data = await pool.query(
+        `UPDATE edu_contest SET end_date=? WHERE no = ?`,
+        [now, post_no]
+      );
+    }
+    res.writeHead(302, {
+      Location: "/api/edu_contest_list",
+    });
+    res.end();
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 module.exports = router;
