@@ -91,11 +91,12 @@ router.get("/:edu_contest_no", async (req, res) => {
       } else {
         body += ` <div>
         <div>
-        <div>
-        댓글 작성자: 익명
-    </div>
+        <span> 댓글 작성자:
+        ${comment[0][i].secret_check ? "익명" : name[0][0].name}
+    </span>
         <span class="comment-content">
-              댓글: 비밀 댓글
+              댓글: 
+              ${comment[0][i].anon_check ? "비밀댓글" : comment[0][i].content}
           </span>
          
         </div>
@@ -110,8 +111,21 @@ router.get("/:edu_contest_no", async (req, res) => {
     comment_write = `자신의 게시글에는 댓글을 작성할 수 없습니다.`;
   } else {
     comment_write += `<form class="comment" action="/api/edu_cont_comment_write" method="POST">
-        <input type='checkbox' id='my_secret_checkbox' name='my_secret_checkbox' value="" /> 비밀 
-         <input type='checkbox' id='my_anon_checkbox' name='my_anon_checkbox' value=""  /> 익명
+    <script type="text/javascript">
+        function is_secret_checked() {
+          const ch = document.getElementById("my_secret_checkbox");
+          const is_checked = ch.checked;
+          document.getElementById('my_secret_checkbox').value = is_checked;
+        }
+
+        function is_anon_checked(){
+          const ch = document.getElementById("my_anon_checkbox");
+          const is_checked = ch.checked;
+          document.getElementById('my_anon_checkbox').value = is_checked;
+        }
+    </script>
+        <input type='checkbox' id='my_secret_checkbox' name='my_secret_checkbox' onclick="is_secret_checked();" value="" /> 비밀 
+         <input type='checkbox' id='my_anon_checkbox' name='my_anon_checkbox' onclick="is_anon_checked();" value=""  /> 익명
          <input name="edu_contest_comment_cont" placeholder="여기에 댓글을 입력해주세요"></input>
         
         <input name="edu_contest_no" type="hidden" value="${edu_contest_no}">
