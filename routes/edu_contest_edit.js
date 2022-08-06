@@ -15,7 +15,6 @@ router.post("/", async (req, res, next) => {
   const head = ``;
   let body = `
     <form action="/api/edu_contest_edit/update" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
-    
     <table>
     <tr>
     <td>교육/공모전 제목: </td>
@@ -24,6 +23,10 @@ router.post("/", async (req, res, next) => {
     <tr>
     <td>교육/공모전 소개(내용) :</td>
     <td><textarea name="content">${data[0][0].content}</textarea></td>
+    </tr>
+    <tr>
+    <td>  <label>교육/공모전 모집 마감일 :</td>
+    <td><input type = "date" name = "end_date" value = "${data[0][0].end_date}"/></label></td>
     </tr>
     <tr>
     <input type="hidden" name="no" value="${data[0][0].no}">
@@ -74,29 +77,28 @@ const upload = multer({
 
 //수정한 글 db에 저장
 router.post("/update", upload.single("img"), async (req, res) => {
-  //console.log("exhibiton-EDIT/update 입성!");
   const no = Number(req.body.no);
   const title = req.body.title;
   const content = req.body.content;
+  const end_date = req.body.end_date;
+  console.log(end_date);
+  const now = new Date();
+  const end = new Date(end_date);
   const img = req.file == undefined ? "" : req.file.path;
 
-  const sql1 = await pool.query(
-    `UPDATE edu_contest SET title=?, content=?, img=?, edited_date=? WHERE no=?`,
-    [title, content, img, new Date().toLocaleDateString, no]
-  );
-
-  //수정할때 이미지 추가 안한경우에는 update문에서 img 속성은 뺴야함
-  const sql2 = await pool.query(
-    "UPDATE edu_contest SET title=?, content=?, edited_date=? WHERE no=?",
-    [title, content, new Date().toLocaleDateString, no]
-  );
-
-  //이미지 없으면 sql2 쿼리, 이미지 있으면 sql1 쿼리
-  let sql = req.file == undefined ? sql2 : sql1;
+  let sql =
+    req.file == undefined
+      ? await pool.query(
+          "UPDATE edu_contest SET title=?, content=?, edited_date=?, end_date=? WHERE no=?",
+          [title, content, now, end, no]
+        )
+      : await pool.query(
+          `UPDATE edu_contest SET title=?, content=?, img=?, edited_date=?, end_date=? WHERE no=?`,
+          [title, content, img, now, end, no]
+        );
   // let params = req.file == undefined ? params2 : params1;
 
   try {
-    // const data = await pool.query(sql, params);
     res.write(
       `<script type="text/javascript">alert('Edu_contest Edit Success !!')</script>`
     );

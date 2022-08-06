@@ -55,7 +55,7 @@ router.post("/", upload.single("img"), async (req, res) => {
   try {
     const data = await pool.query(
       `INSERT INTO edu_contest(title, content, img, iduser, end_date) VALUES(?, ?, ?, ?, ?)`,
-      [title, content, img, req.user.id]
+      [title, content, img, req.user.id, end_date]
     );
     const head = ``;
     const body = `
