@@ -16,8 +16,10 @@ router.get("/:edu_contest_no", async (req, res) => {
 
   let body = `<p>${data[0][0].title}</p> 
   <p>${data[0][0].content}</p>
-  <img src = ${data[0][0].img}> 
-  <form action="/api/edu_contest_edit" method="post">
+  <img src = ${data[0][0].img}> `;
+  if (data[0][0].iduser == req.user.id) {
+    //내 게시글일 경우
+    body += `<form action="/api/edu_contest_edit" method="post">
     <input type="hidden" name="no" value="${data[0][0].no}" />
     <input type="submit" name="edit" value="수정하기" />
   </form>
@@ -26,8 +28,9 @@ router.get("/:edu_contest_no", async (req, res) => {
     <input type="hidden" name="no" value="${data[0][0].no}" />
     <input type="submit" name="delete" value="삭제하기"
       onClick="return confirm('Are you sure you want to delete this post?')" />
-  </form>
-  <strong>댓글</strong><br>
+  </form>`;
+  }
+  body += `<strong>댓글</strong><br>
   `;
 
   //댓글 조회
