@@ -5,7 +5,7 @@ const templates = require("../lib/templates");
 const multer = require("multer");
 const path = require("path");
 
-//작품전시 글 수정하기
+//교육 공모정 글 수정하기
 router.post("/", async (req, res, next) => {
   //   console.log(req.params);
   //   const id = req.params["0"];
