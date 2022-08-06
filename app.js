@@ -58,9 +58,11 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/exhibition", require("./routes/exhibition"));
 app.use("/api/exhibition_edit", require("./routes/exhibition_edit"));
 
+//대외활동 후기 글
 app.use("/api/extra_review_list", require("./routes/extra_review_list"));
 app.use("/api/extra_review_write", require("./routes/extra_review"));
 app.use("/api/extra_review_detail", require("./routes/extra_review_detail"));
+app.use("/api/extra_review_edit", require("./routes/extra_review_edit"));
 
 //취업 후기 글
 app.use("/api/job_review_list", require("./routes/job_review_list"));
