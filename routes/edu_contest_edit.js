@@ -81,14 +81,14 @@ router.post("/update", upload.single("img"), async (req, res) => {
   const img = req.file == undefined ? "" : req.file.path;
 
   const sql1 = await pool.query(
-    `UPDATE edu_contest SET title=?, content=?, img=? WHERE no=?`,
-    [title, content, img, no]
+    `UPDATE edu_contest SET title=?, content=?, img=?, edited_date=? WHERE no=?`,
+    [title, content, img, new Date().toLocaleDateString, no]
   );
 
   //수정할때 이미지 추가 안한경우에는 update문에서 img 속성은 뺴야함
   const sql2 = await pool.query(
-    "UPDATE edu_contest SET title=?, content=? WHERE no=?",
-    [title, content, no]
+    "UPDATE edu_contest SET title=?, content=?, edited_date=? WHERE no=?",
+    [title, content, new Date().toLocaleDateString, no]
   );
 
   //이미지 없으면 sql2 쿼리, 이미지 있으면 sql1 쿼리

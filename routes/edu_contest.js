@@ -20,6 +20,9 @@ router.get("/", async (req, res) => {
       <label> 내용: 
       <input type = "textarea" name = "content" placeholder = "내용을 작성하세요" /> </label>
       <br>
+      <label> 모집 마감 날짜: 
+        <input type = "date" name = "end_date"/> </label>
+        <br>
       <label> 사진: 
       <input type='file' name='img' accept='image/jpg, image/png, image/jpeg' /></label>
       <br>
@@ -47,17 +50,17 @@ router.post("/", upload.single("img"), async (req, res) => {
   const post = req.body;
   const title = post.title;
   const content = post.content;
+  const end_date = post.end_date;
   const img = req.file == undefined ? "" : req.file.path;
   try {
     const data = await pool.query(
-      `INSERT INTO edu_contest(title, content, img, iduser) VALUES(?, ?, ?, ?)`,
+      `INSERT INTO edu_contest(title, content, img, iduser, end_date) VALUES(?, ?, ?, ?, ?)`,
       [title, content, img, req.user.id]
     );
     const head = ``;
     const body = `
       <h3>${title}</h3>
       <p>${content}</p>
-  
       <a href="/api/edu_contest_list">목록으로 돌아가기</a>
       `;
 
