@@ -99,6 +99,12 @@ app.use(
   require("./routes/edu_contest_comment_edit")
 );
 
+//교육/공모전 댓글
+// app.use(
+//   "/api/edu_contest_recomment",
+//   require("./routes/edu_contest_recomment")
+// );
+
 //학생회 공지 글
 app.use(
   "/api/student_council_notice_list",
