@@ -67,8 +67,8 @@ router.post("/post", fileFields, async (req, res) => {
 
   const date = new Date();
   const notice_id = date % 10000;
-  const title = post.notice_title;
-  const cont = post.notice_cont;
+  const title = post.title;
+  const cont = post.content;
   const notice_img = post.files.img == undefined ? "" : post.files.img[0].path;
   const notice_file =
     post.files.file == undefined ? "" : post.files.file[0].path;
