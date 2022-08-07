@@ -51,10 +51,14 @@ router.post('/post', upload.single('img'), async (req, res) => {
     const exh_content=req.body.exh_content;
     const exh_award=req.body.exh_award;
     const exh_contestName=req.body.exh_contestName;
+    //8월7일 추가
+    const link_github=req.body.link_github;
+    const link_service=req.body.link_service;
+
     const exh_img = req.file == undefined ? '' : req.file.path;
 
-    const sql = "INSERT INTO exhibition (userid, exh_title, exh_content, exh_img, exh_award, exh_contestName) VALUES (?, ?, ?, ?, ?, ? )";
-    const params = [userid, exh_title, exh_content, exh_img, exh_award, exh_contestName];
+    const sql = "INSERT INTO exhibition (iduser, title, content, img, award, contestName, link_github, link_service) VALUES (?, ?, ?, ?, ?, ? ,? ,?)";
+    const params = [userid, exh_title, exh_content, exh_img, exh_award, exh_contestName, link_github, link_service];
 
     try {
         const data = await pool.query(sql,params);
@@ -86,33 +90,35 @@ const getPage = (title, description,auth,data)=>{
       <hr>`
 
       for(let i=0; i < data.length; i++) {
-        if(auth.id==data[i].userid){
+        if(auth.id==data[i].iduser){
           htmlbody+=`
           <form action="/api/exhibition_edit" method="post">
-          <input type="hidden" name="id" value="${data[i].idexhibition}">
+          <input type="hidden" name="id" value="${data[i].no}">
           <input type="submit" name="edit" value="수정하기">
           </form>
 
           <form action="/api/exhibition_edit/delete" method="post">
-          <input type="hidden" name="id" value="${data[i].idexhibition}">
+          <input type="hidden" name="id" value="${data[i].no}">
           <input type="submit" name="delete" value="삭제하기"
           onClick="return confirm('Are you sure you want to delete this exhibition?')">
           </form>`
         }
-        htmlbody +=`<p><b>프로젝트이름: ${data[i].exh_title}</b></p>`
+        htmlbody +=`<p><b>프로젝트이름: ${data[i].title}</b></p>`
 
-        if(data[i].exh_award==null){
+        if(data[i].award==null){
           htmlbody+=`<p>수상경력: 없음</p>`
-        }else{htmlbody+=`<p>수상경력: ${data[i].exh_award}</p>`}
-        if(data[i].exh_contestName==null){
+        }else{htmlbody+=`<p>수상경력: ${data[i].award}</p>`}
+        if(data[i].contestName==null){
           htmlbody+=`<p>참가대회: 없음</p>`
         }else{
-          htmlbody+=`<p>참가대회: ${data[i].exh_contestName}</p>` 
+          htmlbody+=`<p>참가대회: ${data[i].contestName}</p>` 
         }
 
         htmlbody+=`
-        <img src="${data[i].exh_img}" />
-        <p>프로젝트 소개: ${data[i].exh_content}</p>
+        <img src="${data[i].img}" />
+        <p>프로젝트 소개: ${data[i].content}</p>
+        <a href="${data[i].link_github}">깃허브 바로가기</a>
+        <a href="${data[i].link_service}">서비스 바로가기</a>
         <hr>`;
       }
 
@@ -155,6 +161,13 @@ const postPage=(description)=>{
         <td><input type="text" name="exh_contestName" placeholder = "ex)개인프로젝트,소웨경,000공모전"></td>
         </tr>
         <br>
+
+        <td>깃허브 링크: </td>
+        <td><input type="text" name="link_github"></td>
+
+        <td>서비스링크: </td>
+        <td><input type="text" name="link_service"></td>
+
         <tr>
         <td><input type="submit" value="등록"></td>
         </tr>
