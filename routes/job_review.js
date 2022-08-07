@@ -14,8 +14,7 @@ router.post("/", async (req, res) => {
       [title, content, now, iduser]
     );
     res.json({
-      title: title,
-      content: content,
+      data: data,
     });
   } catch (err) {
     console.error(err);
