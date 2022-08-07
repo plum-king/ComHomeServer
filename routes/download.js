@@ -20,7 +20,7 @@ router.get('/:file_name', async(req, res, next) => {
       const file_infoN='uploads\\'+filename;
 
       try {
-        data = await pool.query(`SELECT * FROM file_intern WHERE file_infoN= ? `,[file_infoN]);
+        data = await pool.query(`SELECT * FROM file_sc WHERE file_infoN= ? `, [file_infoN]);
         console.log(data[0][0].file_originN);
       } catch (err) {
         console.error(err);
