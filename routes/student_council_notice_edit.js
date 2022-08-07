@@ -10,6 +10,8 @@ router.post("/", async (req, res, next) => {
   const data = await pool.query(
     `SELECT * FROM student_council_notice WHERE no=${req.body.no}`
   );
+  const data_det = data[0][0];
+  // res.json({data_det: data_det});
   const title = "학생회 공지 수정";
   const head = ``;
   let body = `
@@ -102,6 +104,7 @@ router.post("/update", upload.single("img"), async (req, res) => {
 
   try {
     const data = await pool.query(sql, params);
+    // res.json({data:data});
     res.write(
       `<script type="text/javascript">alert('student_council_notice Edit Success !!')</script>`
     );
