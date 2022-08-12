@@ -117,6 +117,9 @@ app.use(
   require("./routes/student_council_notice_edit")
 );
 
+//스크랩
+app.use("/api/scrap", require("./routes/scrap"));
+
 //마이페이지
 app.use("/api/mypage", require("./routes/mypage"));
 

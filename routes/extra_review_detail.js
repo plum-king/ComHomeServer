@@ -9,16 +9,38 @@ router.get("/:review_no", async (req, res) => {
   const review_no = path.parse(req.params.review_no).base;
   const title = review_no + "번 게시글";
   const head = ``;
-  const data = await pool.query(`SELECT * FROM extra_review where no = ?`, [review_no]);
+  const data = await pool.query(`SELECT * FROM extra_review where no = ?`, [
+    review_no,
+  ]);
+  const scrap = await pool.query(`SELECT * FROM scrap where iduser =?`, [
+    req.user.id,
+  ]);
   //조회수 +1
   try {
-    const data = await pool.query("UPDATE recruit_intern set views=views+1 where no =? ", [review_no]);
+    const data = await pool.query(
+      "UPDATE recruit_intern set views=views+1 where no =? ",
+      [review_no]
+    );
   } catch (err) {
     console.error(err);
   }
 
+  //스크랩 버튼 추가
   let body = `<p>${data[0][0].title}</p> 
-  <p>${data[0][0].content}</p>`;
+  <p>${data[0][0].content}</p>
+  ${
+    data[0][0].id != req.user.id
+      ? scrap[0][0] == undefined
+        ? `<form action="/api/scrap/edu_contest" method="post">
+  <input type="hidden" name="no" value="${data[0][0].no}" />
+  <input type="submit" name="scrap" value="스크랩" />
+  </form>`
+        : `<form action="/api/scrap/edu_contest_cancel" method="post">
+  <input type="hidden" name="no" value="${data[0][0].no}" />
+  <input type="submit" name="scrap" value="스크랩 취소" />
+  </form>`
+      : ``
+  }`;
   if (req.user.id == data[0][0].iduser) {
     body += `<form action="/api/extra_review_edit/${review_no}" method="post">
     <input type="hidden" name="no" value="${review_no}">
