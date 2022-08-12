@@ -9,24 +9,27 @@ const multer = require("multer");
 router.get("/:edu_contest_no", async (req, res) => {
   const edu_contest_no = path.parse(req.params.edu_contest_no).base;
   const title = edu_contest_no + "번 게시글";
-  const head = `
-  <style>
-    #check-btn { display: none; }
-    #recomment_submit { display: none; }
-    #my_resecret_checkbox { display: none; }
-    #my_reanon_checkbox  { display: none; }
-    #check-btn:checked ~ #recomment_input { display: block; } 
-    #check-btn:checked ~ #recomment_submit { display: block; } 
-    #check-btn:checked ~ #my_resecret_checkbox { display: block; } 
-    #check-btn:checked ~ #my_reanon_checkbox { display: block; } 
-    #recomment_input { display: none; }
-  </style>
-  `;
+  // const head = `
+  // <style>
+  //   #check-btn { display: none; }
+  //   #recomment_submit { display: none; }
+  //   #my_resecret_checkbox { display: none; }
+  //   #my_reanon_checkbox  { display: none; }
+  //   #check-btn:checked ~ #recomment_input { display: block; }
+  //   #check-btn:checked ~ #recomment_submit { display: block; }
+  //   #check-btn:checked ~ #my_resecret_checkbox { display: block; }
+  //   #check-btn:checked ~ #my_reanon_checkbox { display: block; }
+  //   #recomment_input { display: none; }
+  // </style>
+  // `;
+  const head = ``;
   const data = await pool.query(`SELECT * FROM edu_contest where no = ?`, [
     edu_contest_no,
   ]);
 
-  let body = `<p>${data[0][0].title}</p> 
+  let body = `
+  <p>${data[0][0].iduser}</p>
+  <p>${data[0][0].title}</p> 
   <p>${data[0][0].content}</p>
   <img src = ${data[0][0].img}> `;
   if (data[0][0].iduser == req.user.id) {
@@ -63,7 +66,7 @@ router.get("/:edu_contest_no", async (req, res) => {
 
   //댓글 조회
   let comment_write = ``;
-  const comment = await pool.query(
+  let comment = await pool.query(
     `SELECT * FROM edu_contest_comment WHERE edu_contest_no = ?`,
     [edu_contest_no]
   );
@@ -94,10 +97,24 @@ router.get("/:edu_contest_no", async (req, res) => {
 
   <form action="/api/edu_contest_comment_edit/delete" method="post">
     <input type="hidden" name="no" value="${comment[0][i].no}" />
-    <input type="hidden" name="post_no" value="${data[0][0].no}" />
+    <input type="hidden" name="edu_contest_no" value="${data[0][0].no}" />
     <input type="submit" name="delete" value="삭제하기"
       onClick="return confirm('Are you sure you want to delete this comment?')" />
   </form>
+
+  <form action="/api/edu_contest_comment_write/rec_update" method="post">
+                <input type="hidden" name="no" value="${comment[0][i].no}" />
+                <input type="hidden" name="edu_contest_no" value="${
+                  data[0][0].no
+                }" />
+                ${
+                  comment[0][i].recomment != null
+                    ? ` <p> 글쓴 컴공 수정 : </p>
+                      <p> ${comment[0][i].recomment} </p>`
+                    : `답변 전`
+                }
+                  
+              </form>
         
       </div>
     </div>
@@ -109,7 +126,9 @@ router.get("/:edu_contest_no", async (req, res) => {
           <div>
           <div>
         댓글 작성자: ${
-          comment[0][0].iduser == req.user.id ? "글쓴이" : name[0][0].name
+          comment[0][0].iduser == data[0][0].iduser
+            ? "글쓴 컴공 수정"
+            : name[0][0].name
         } 
           </div>
         <span class="comment-content">
@@ -127,16 +146,24 @@ router.get("/:edu_contest_no", async (req, res) => {
                 document.getElementById('my_reanon_checkbox').value = is_checked;
               }
             </script>
-              <form action="/api/edu_contest_recomment" method="post">
-                <input type="hidden" name="no" value="${comment[0][i].no}" />
-                <input type="hidden" name="post_no" value="${data[0][0].no}" />
-                <input id="check-btn" type="checkbox" />
-                  <label for="check-btn">대댓글</label>
-                  <input type='checkbox' id='my_resecret_checkbox' name='my_resecret_checkbox' onclick="is_secret_checked();" value="" />비밀
-                  <input type='checkbox' id='my_reanon_checkbox' name='my_reanon_checkbox' onclick="is_anon_checked();" value="" />익명
-                <input type ="text" id="recomment_input" name="recomment_input" placeholder="대댓글을 작성해주세요" />
-                <input type="submit" id="recomment_submit" name="recomment_submit" value="작성하기" />
-              </form>
+              
+                ${
+                  comment[0][i].recomment != null
+                    ? ` <p> 글쓴 컴공 수정 : </p>
+                      <p> ${comment[0][i].recomment} </p>
+                      <form action="/api/edu_contest_comment_write/rec_delete" method="post">
+                      <input type="hidden" name="no" value="${comment[0][i].no}" />
+                      <input type="hidden" name="edu_contest_no" value="${data[0][0].no}" />
+                      <input type="submit" name="delete" value="삭제하기" onClick="return confirm('Are you sure you want to delete this comment?')" />
+                      </form>`
+                    : `<form action="/api/edu_contest_comment_write/rec_update" method="post">
+                    <input type="hidden" name="no" value="${comment[0][i].no}" />
+                    <input type="hidden" name="edu_contest_no" value="${data[0][0].no}" /><label>대댓글</label>
+                      <input type='checkbox' id='my_secret_checkbox' name='my_secret_checkbox' onclick="is_secret_checked();" value="" />비밀
+                    <input type ="text" id="content" name="content" placeholder="대댓글을 작성해주세요" />
+                    <input type="submit" id="recomment_submit" name="recomment_submit" value="작성하기" />  </form>`
+                }
+
           </span>
           
         </div>
@@ -147,8 +174,8 @@ router.get("/:edu_contest_no", async (req, res) => {
         <div>
         <span> 댓글 작성자:
         ${
-          comment[0][0].iduser == req.user.id
-            ? "글쓴이"
+          comment[0][0].iduser == data[0][0].iduser
+            ? "글쓴 컴공 수정"
             : comment[0][i].secret_check
             ? "익명"
             : name[0][0].name
@@ -170,15 +197,18 @@ router.get("/:edu_contest_no", async (req, res) => {
                 document.getElementById('my_reanon_checkbox').value = is_checked;
               }
             </script>
-              <form action="/api/edu_contest_recomment" method="post">
+              <form action="/api/edu_contest_comment_write/rec_update" method="post">
                 <input type="hidden" name="no" value="${comment[0][i].no}" />
-                <input type="hidden" name="post_no" value="${data[0][0].no}" />
-                <input id="check-btn" type="checkbox" />
-                  <label for="check-btn">대댓글</label>
-                  <input type='checkbox' id='my_resecret_checkbox' name='my_resecret_checkbox' onclick="is_secret_checked();" value="" /> 비밀
-                  <input type='checkbox' id='my_reanon_checkbox' name='my_reanon_checkbox' onclick="is_anon_checked();" value="" /> 익명
-                <input type ="text" id="recomment_input" name="recomment_input" placeholder="대댓글을 작성해주세요" />
-                <input type="submit" id="recomment_submit" name="recomment_submit" value="작성하기" />
+                <input type="hidden" name="edu_contest_no" value="${
+                  data[0][0].no
+                }" />
+                ${
+                  comment[0][i].recomment != null
+                    ? comment[0][i].iduser == req.user.id
+                      ? ` <p> 글쓴 컴공 수정 : ${comment[0][i].recomment} </p>`
+                      : `답변 완료`
+                    : ``
+                }
               </form>
           </span>
          
@@ -190,7 +220,7 @@ router.get("/:edu_contest_no", async (req, res) => {
       i++;
     }
   }
-  comment_write += `<form class="comment" action="/api/edu_cont_comment_write" method="POST">
+  comment_write += `<form class="comment" action="/api/edu_contest_comment_write" method="POST">
     <script type="text/javascript">
         function is_secret_checked() {
           const ch = document.getElementById("my_secret_checkbox");
@@ -204,21 +234,19 @@ router.get("/:edu_contest_no", async (req, res) => {
           document.getElementById('my_anon_checkbox').value = is_checked;
         }
     </script>
-        <input type='checkbox' id='my_secret_checkbox' name='my_secret_checkbox' onclick="is_secret_checked();" value="" /> 비밀
         ${
           data[0][0].iduser == req.user.id
-            ? "글쓴이"
-            : `<input type='checkbox' id='my_anon_checkbox' name='my_anon_checkbox' onclick="is_anon_checked();" value=""  /> 익명`
-        } 
-         <input name="edu_contest_comment_cont" placeholder="여기에 댓글을 입력해주세요"></input>
-        
+            ? ``
+            : `<input type='checkbox' id='my_secret_checkbox' name='my_secret_checkbox' onclick="is_secret_checked();" value="" /> 비밀
+                <input type='checkbox' id='my_anon_checkbox' name='my_anon_checkbox' onclick="is_anon_checked();" value=""  /> 익명`
+        }          
+        <input name="content" placeholder="여기에 댓글을 입력해주세요"></input>
         <input name="edu_contest_no" type="hidden" value="${edu_contest_no}">
-        <br>
         <button type="submit">댓글 입력</button>
-      
       </form>
       `;
   body += ` ${comment_write} <br> <a href = "/api/edu_contest_list">목록으로 돌아가기</a><br>  `;
+  //comment = comment[0]
   var html = templates.HTML(title, head, body);
   res.send(html);
 });

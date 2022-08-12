@@ -93,7 +93,7 @@ app.use("/api/edu_contest_detail", require("./routes/edu_contest_detail"));
 app.use("/api/edu_contest_edit", require("./routes/edu_contest_edit"));
 
 //교육/공모전 댓글
-app.use("/api/edu_cont_comment_write", require("./routes/edu_cont_comment"));
+app.use("/api/edu_contest_comment_write", require("./routes/edu_cont_comment"));
 app.use(
   "/api/edu_contest_comment_edit",
   require("./routes/edu_contest_comment_edit")
@@ -110,10 +110,10 @@ app.use(
   "/api/student_council_notice_list",
   require("./routes/student_council_notice_list")
 );
-app.use(
-  "/api/student_council_notice_check",
-  require("./routes/student_council_notice_check")
-);
+// app.use(
+//   "/api/student_council_notice_check",
+//   require("./routes/student_council_notice_check")
+// );
 app.use(
   "/api/student_council_notice",
   require("./routes/student_council_notice")
