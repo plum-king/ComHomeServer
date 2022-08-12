@@ -27,7 +27,7 @@ app.get("/", async (req, res) => {
 //프론트 임시로->url 바로 들어가도 된다.
 const getBtn = (user) => {
   return user !== undefined
-    ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/api/student_council_notice_list">학생회 공지</a>`
+    ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/api/student_council_notice_list">학생회 공지</a><br><br><a href="/api/mypage">마이페이지</a>`
     : `<a href="/api/auth/google">Google Login</a>`;
 };
 
@@ -99,21 +99,11 @@ app.use(
   require("./routes/edu_contest_comment_edit")
 );
 
-//교육/공모전 댓글
-// app.use(
-//   "/api/edu_contest_recomment",
-//   require("./routes/edu_contest_recomment")
-// );
-
 //학생회 공지 글
 app.use(
   "/api/student_council_notice_list",
   require("./routes/student_council_notice_list")
 );
-// app.use(
-//   "/api/student_council_notice_check",
-//   require("./routes/student_council_notice_check")
-// );
 app.use(
   "/api/student_council_notice",
   require("./routes/student_council_notice")
@@ -126,6 +116,9 @@ app.use(
   "/api/student_council_notice_edit",
   require("./routes/student_council_notice_edit")
 );
+
+//마이페이지
+app.use("/api/mypage", require("./routes/mypage"));
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);

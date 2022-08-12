@@ -9,19 +9,6 @@ const multer = require("multer");
 router.get("/:edu_contest_no", async (req, res) => {
   const edu_contest_no = path.parse(req.params.edu_contest_no).base;
   const title = edu_contest_no + "번 게시글";
-  // const head = `
-  // <style>
-  //   #check-btn { display: none; }
-  //   #recomment_submit { display: none; }
-  //   #my_resecret_checkbox { display: none; }
-  //   #my_reanon_checkbox  { display: none; }
-  //   #check-btn:checked ~ #recomment_input { display: block; }
-  //   #check-btn:checked ~ #recomment_submit { display: block; }
-  //   #check-btn:checked ~ #my_resecret_checkbox { display: block; }
-  //   #check-btn:checked ~ #my_reanon_checkbox { display: block; }
-  //   #recomment_input { display: none; }
-  // </style>
-  // `;
   const head = ``;
   const data = await pool.query(`SELECT * FROM edu_contest where no = ?`, [
     edu_contest_no,
