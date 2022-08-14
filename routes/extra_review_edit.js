@@ -4,41 +4,7 @@ const pool = require("../db.js");
 const templates = require("../lib/templates");
 const multer = require("multer");
 const path = require("path");
-
-// //작품전시 글 수정하기
-// router.post("/:id", async (req, res, next) => {
-//     const no = req.body.no;
-//     const data = await pool.query(`SELECT * FROM extra_review WHERE no=${no}`);
-//     if (req.user.id != data[0][0].iduser) res.send("권한이 없습니다.");
-//     else {
-//         const title = "취업후기 글 수정";
-//         const head = ``;
-//         let body = `
-//     <form action="/api/extra_review_edit/update/${no}" method ="post" accept-charset="UTF-8">
-
-//     <table>
-//     <tr>
-//     <td>대외활동후기글 제목: </td>
-//     <td><input type="text" name="title" value="${data[0][0].title}"></td>
-//     </tr>
-//     <tr>
-//     <td>대외활동후기글 소개(내용) :</td>
-//     <td><textarea name="content">${data[0][0].content}</textarea></td>
-//     </tr>
-//     <tr>
-//     <input type="hidden" name="no" value="${data[0][0].no}">
-//     <td><input type="submit" value="수정"></td>
-//     </tr>
-//     </table>
-
-//     </form>
-//     `;
-
-//         var html = templates.HTML(title, head, body);
-//         res.send(html);
-//     }
-
-// });
+const { sendNotification } = require("./push.js");
 
 //수정한 글 db에 저장
 router.post("/update", async (req, res) => {

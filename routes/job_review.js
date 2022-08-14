@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
+const { sendNotification } = require("./push.js");
 
 router.post("/post", async (req, res) => {
   const post = req.body;

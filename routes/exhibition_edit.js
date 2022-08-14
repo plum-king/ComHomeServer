@@ -4,6 +4,7 @@ const pool = require("../db.js");
 const templates = require("../lib/templates");
 const multer = require("multer");
 const path = require("path");
+const { sendNotification } = require("./push.js");
 
 //작품전시 글 수정하기
 router.post("/", async (req, res, next) => {

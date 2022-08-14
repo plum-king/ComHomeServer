@@ -4,6 +4,7 @@ const pool = require("../db.js");
 const templates = require("../lib/templates");
 const multer = require("multer");
 const path = require("path");
+const { sendNotification } = require("./push.js");
 
 //이미지 업로드를 위한 multer
 const upload = multer({

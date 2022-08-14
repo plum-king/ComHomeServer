@@ -5,9 +5,7 @@ const passport = require("passport");
 const session = require("express-session");
 const cors = require("cors");
 const pool = require("./db.js");
-const config = require("./routes/push");
-
-const publicKey = config.publicKey;
+const { publicKey, sendNotification } = require("./routes/push");
 
 app.use(cors());
 app.use(session({secret: "MySecret", resave: false, saveUninitialized: true}));
