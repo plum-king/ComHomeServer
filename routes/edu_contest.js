@@ -19,7 +19,7 @@ const upload = multer({
 // 글 작성하기
 router.post("/", upload.single("img"), async (req, res) => {
   const post = req.body;
-  const iduser = post.id;
+  const iduser = post.iduser;
   const title = post.title;
   const content = post.content;
   const end_date = post.end_date;

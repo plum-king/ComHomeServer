@@ -5,13 +5,23 @@ const path = require("path");
 
 router.get("/:edu_contest_no", async (req, res) => {
   const edu_contest_no = path.parse(req.params.edu_contest_no).base;
- 
+
   const data = await pool.query(`SELECT * FROM edu_contest where no = ?`, [
     edu_contest_no,
   ]);
   const scrap = await pool.query(`SELECT * FROM scrap where iduser =?`, [
     req.user.id,
   ]);
+
+  //조회수 +1
+  try {
+    const data = await pool.query(
+      "UPDATE edu_contest set views=views+1 where no =? ",
+      [edu_contest_no]
+    );
+  } catch (err) {
+    console.error(err);
+  }
 
   //댓글 조회
   let comment = await pool.query(
