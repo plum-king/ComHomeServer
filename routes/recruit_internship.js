@@ -64,7 +64,6 @@ router.post("/post", fileFields, async (req, res) => {
     const message = {
       message: `채용 인턴십 글이 새로 올라왔습니다!`,
     };
-    console.log(recruit_data);
     recruit_data.map((subscribe) => {
         sendNotification(JSON.parse(subscribe.subscribe), message);
     })

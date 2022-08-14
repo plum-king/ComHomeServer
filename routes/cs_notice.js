@@ -63,7 +63,6 @@ router.post("/post", fileFields, async (req, res) => {
     const message = {
       message: `학과 공지글이 새로 올라왔습니다!`,
     };
-    console.log(cs_data);
     cs_data.map((subscribe) => {
         sendNotification(JSON.parse(subscribe.subscribe), message);
     })

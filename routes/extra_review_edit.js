@@ -62,7 +62,6 @@ router.post("/update", async (req, res) => {
     const message = {
         message: `대외 활동 후기 글이 수정되었습니다!`,
     };
-    console.log(extra_data);
     extra_data.map((subscribe) => {
         sendNotification(JSON.parse(subscribe.subscribe), message);
     })

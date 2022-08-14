@@ -24,7 +24,6 @@ router.post("/update", async (req, res) => {
     const message = {
       message: `취업 후기 글이 수정되었습니다!`,
     };
-    console.log(job_data);
     job_data.map((subscribe) => {
         sendNotification(JSON.parse(subscribe.subscribe), message);
     })

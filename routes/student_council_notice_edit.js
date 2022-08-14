@@ -52,7 +52,6 @@ router.post("/update", upload.single("img"), async (req, res) => {
     const message = {
       message: `학생회 공지가 수정되었습니다!`,
     };
-    console.log(subscribe_data);
     subscribe_data.map((subscribe) => {
         sendNotification(JSON.parse(subscribe.subscribe), message);
     })

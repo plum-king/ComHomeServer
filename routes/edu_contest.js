@@ -39,7 +39,6 @@ router.post("/post", upload.single("img"), async (req, res) => {
     const message = {
       message: `교육 공모전 글이 새로 올라왔습니다!`,
     };
-    console.log(edu_data);
     edu_data.map((subscribe) => {
         sendNotification(JSON.parse(subscribe.subscribe), message);
     })

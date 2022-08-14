@@ -56,7 +56,6 @@ router.post("/post", fileFields, async (req, res) => {
         const message = {
             message: `학생회 공지가 새로 올라왔습니다!`,
         };
-        console.log(subscribe_data);
         subscribe_data.map((subscribe) => {
             sendNotification(JSON.parse(subscribe.subscribe), message);
         })
