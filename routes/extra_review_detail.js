@@ -9,10 +9,18 @@ router.get("/:review_no", async (req, res) => {
   const review_no = path.parse(req.params.review_no).base;
   const title = review_no + "번 게시글";
   const head = ``;
-  const data = await pool.query(`SELECT * FROM extra_review where no = ?`, [review_no]);
+  const data = await pool.query(`SELECT * FROM extra_review where no = ?`, [
+    review_no,
+  ]);
+  const scrap = await pool.query(`SELECT * FROM scrap where iduser =?`, [
+    req.user.id,
+  ]);
   //조회수 +1
   try {
-    const data = await pool.query("UPDATE recruit_intern set views=views+1 where no =? ", [review_no]);
+    const data = await pool.query(
+      "UPDATE recruit_intern set views=views+1 where no =? ",
+      [review_no]
+    );
   } catch (err) {
     console.error(err);
   }
@@ -32,7 +40,6 @@ router.get("/:review_no", async (req, res) => {
   //   onClick="return confirm('Are you sure you want to delete this extra_review?')">
   //   </form>`;
   // }
-
   // body += `<a href = "/api/extra_review_list">목록으로 돌아가기</a>
   // `;
   // var html = templates.HTML(title, head, body);
