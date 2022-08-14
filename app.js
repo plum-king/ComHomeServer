@@ -22,15 +22,18 @@ app.use(express.json());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 //홈페이지 생성 (req.user는 passport의 serialize를 통해 user 정보 저장되어있음)
-app.get("/", async (req, res) => {
+app.get("/api", async (req, res) => {
   const temp = getPage("Welcome", "Welcome to visit...", getBtn(req.user));
   const iduser = req.query.iduser;
   //로그인 시 사용자 구독정보 전송
-  if (iduser != undefined){
-    const [data] = await pool.query(`SELECT recruit_intern, exhibition, student_council_notice, job_review, edu_contest, cs_notice, extra_review FROM subscriptions where iduser = ${iduser}`);
-      res.json({data: data});
-  }else{
-    res.json({message : '400 Bad Request'}); 
+  if (iduser != undefined) {
+    const [data] = await pool.query(
+      `SELECT recruit_intern, exhibition, student_council_notice, job_review, edu_contest, cs_notice, extra_review FROM subscriptions where iduser = ${iduser}`
+    );
+    res.json({data: data});
+  } else {
+    // res.json({message : '400 Bad Request'});
+    res.send(temp);
   }
 });
 
@@ -116,10 +119,22 @@ app.use(
 );
 
 //학생회 공지 글
-app.use("/api/student_council_notice_list", require("./routes/student_council_notice_list"));
-app.use("/api/student_council_notice", require("./routes/student_council_notice"));
-app.use("/api/student_council_notice_detail",require("./routes/student_council_notice_detail"));
-app.use("/api/student_council_notice_edit",require("./routes/student_council_notice_edit"));
+app.use(
+  "/api/student_council_notice_list",
+  require("./routes/student_council_notice_list")
+);
+app.use(
+  "/api/student_council_notice",
+  require("./routes/student_council_notice")
+);
+app.use(
+  "/api/student_council_notice_detail",
+  require("./routes/student_council_notice_detail")
+);
+app.use(
+  "/api/student_council_notice_edit",
+  require("./routes/student_council_notice_edit")
+);
 
 //스크랩
 app.use("/api/scrap", require("./routes/scrap"));
@@ -128,7 +143,9 @@ app.use("/api/scrap", require("./routes/scrap"));
 app.use("/api/mypage", require("./routes/mypage"));
 
 //알림
-app.get("/api/publicKey", (_req, res) => {res.send(publicKey);});
+app.get("/api/publicKey", (_req, res) => {
+  res.send(publicKey);
+});
 app.use("/api/pushSubscription", require("./routes/pushSubscription"));
 
 app.listen(port, () => {
