@@ -35,8 +35,8 @@ router.post("/rec_update", async (req, res) => {
 
   try {
     const comment_update = await pool.query(
-      `UPDATE edu_contest_comment SET recomment = ? WHERE no = ?`,
-      [content, comment_no]
+      `UPDATE edu_contest_comment SET recomment = ?, recomment_check = ? WHERE no = ?`,
+      [content, 1, comment_no]
     );
     status = 200;
   } catch (err) {

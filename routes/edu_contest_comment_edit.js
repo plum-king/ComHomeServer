@@ -49,8 +49,8 @@ router.post("/rec_delete", async (req, res) => {
 
   try {
     const comment_delete = await pool.query(
-      `UPDATE edu_contest_comment SET recomment = null WHERE no = ?`,
-      [comment_no]
+      `UPDATE edu_contest_comment SET recomment = null, recomment_check =? WHERE no = ?`,
+      [0, comment_no]
     );
     status = 200;
   } catch (err) {
