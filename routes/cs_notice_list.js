@@ -11,7 +11,6 @@ router.get("/", async (req, res) => {
   const data = await pool.query(
     `SELECT * FROM cs_notice ORDER BY upload_time DESC`
   );
-  // const time_data = await pool.query(`SELECT date_format(upload_time, '%Y-%m-%d') FROM cs_notice ORDER BY upload_time DESC`);
   let data_det = data[0];
 
   res.json({data_det: data_det});

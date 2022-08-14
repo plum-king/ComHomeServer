@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("../config/passport.js");
 const pool = require("../db.js");
 const multer = require("multer");
-const templates = require("../lib/templates");
 const path = require("path");
 
 //이미지 업로드를 위한 multer
@@ -18,8 +16,10 @@ const upload = multer({
   }),
 });
 
+// 글 작성하기
 router.post("/", upload.single("img"), async (req, res) => {
   const post = req.body;
+  const iduser = post.iduser;
   const title = post.title;
   const content = post.content;
   const end_date = post.end_date;
@@ -27,11 +27,12 @@ router.post("/", upload.single("img"), async (req, res) => {
   try {
     const data = await pool.query(
       `INSERT INTO edu_contest(title, content, img, iduser, end_date) VALUES(?, ?, ?, ?, ?)`,
-      [title, content, img, iduser, end_date]
+      [title, content, img, "iduser", end_date] //iduser 나중에 바꾸기
     );
+    let no = data[0].insertId;
     res.json({
-      title: title,
-      content: content,
+      no: no,
+      data: data[0][0],
     });
   } catch (err) {
     console.error(err);
@@ -41,19 +42,12 @@ router.post("/", upload.single("img"), async (req, res) => {
 router.post("/expire", async (req, res) => {
   const post = req.body;
   const post_no = post.no;
-  const con_exp_time = post.con_exp_time ? 1 : 0;
-  const now = new Date();
+  const end_date = post.end_date;
   try {
-    if (con_exp_time) {
-      const data = await pool.query(
-        `UPDATE edu_contest SET end_date=? WHERE no = ?`,
-        [now, post_no]
-      );
-    }
-    // res.writeHead(302, {
-    //   Location: "/api/edu_contest_list",
-    // });
-    // res.end();
+    const data = await pool.query(
+      `UPDATE edu_contest SET end_date=? WHERE no = ?`,
+      [end_date, post_no]
+    );
     res.json({
       no: no,
     });

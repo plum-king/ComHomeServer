@@ -6,7 +6,6 @@ const path = require("path");
 
 router.get("/:notice_id", async (req, res) => {
   const notice_id = path.parse(req.params.notice_id).base;
-  // console.log(notice_id);
 
   //조회수 +1
   try {
@@ -24,7 +23,7 @@ router.get("/:notice_id", async (req, res) => {
       [notice_id]
     );
     res.json({
-      data: data,
+      data: data[0][0],
       data_file: data_file,
     });
   } catch (err) {

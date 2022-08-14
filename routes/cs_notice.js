@@ -1,43 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
-const templates = require("../lib/templates");
 const multer = require("multer");
 const path = require("path");
-
-// //학과공지 글 작성하기
-// router.get("/post", async (req, res) => {
-//     if(!req.user) {
-//       res.write(`<script type="text/javascript">alert('Please Login First !!')</script>`);
-//       res.write(`<script>window.location="/api/auth/login"</script>`);
-//       res.end();
-//     }
-//     const title = "학과공지글 작성";
-//     const head = ``;
-//     const body = `
-//     <form action="/api/cs_notice/post" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
-//     <b>학과공지글 작성</b>
-//     <br>
-//     <label> 제목:
-//       <input type = "text" name = "title" placeholder = "제목을 작성하세요" /> </label>
-//       <br>
-//       <br>
-//       <label> 내용:
-//       <textarea name="content" placeholder = "내용을 작성하세요"></textarea></label>
-//       <br>
-//       <label> 사진:
-//       <input type='file' name='img' accept='image/jpg, image/png, image/jpeg' /></label>
-//       <br>
-//       <label> 파일:
-//       <input type='file' name='file' multiple/></label>
-
-//       <button type="submit"><b>등록</b></button>
-//       </form>
-//     `;
-
-//     var html = templates.HTML(title, head, body);
-//     res.send(html);
-//   });
 
 //이미지 업로드를 위한 multer
 const upload = multer({
@@ -58,8 +23,8 @@ const fileFields = upload.fields([
 
 router.post("/post", fileFields, async (req, res) => {
   const post = req.body;
-  //req.setCharacterEncoding("utf-8");
   const {img, file} = post.files;
+  let status = 404;
 
   let count; //파일개수
   if (post.files.file) {
@@ -96,9 +61,13 @@ router.post("/post", fileFields, async (req, res) => {
         [notice_id, post.files.file[i].path, post.files.file[i].originalname]
       );
     }
+    status = 200;
   } catch (err) {
     console.error(err);
   }
+  res.json({
+    status: status,
+  });
 });
 
 module.exports = router;
