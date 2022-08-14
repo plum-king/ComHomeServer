@@ -28,7 +28,6 @@ app.get("/", async (req, res) => {
 const getBtn = (user) => {
   return user !== undefined
     ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/api/student_council_notice_list">학생회 공지</a><br><br><a href="/api/mypage">마이페이지</a>`
-
     : `<a href="/api/auth/google">Google Login</a>`;
 };
 
@@ -67,13 +66,13 @@ app.use("/api/cs_notice_edit", require("./routes/cs_notice_edit"));
 
 //대외활동 후기 글
 app.use("/api/extra_review_list", require("./routes/extra_review_list"));
-app.use("/api/extra_review_write", require("./routes/extra_review"));
+app.use("/api/extra_review", require("./routes/extra_review"));
 app.use("/api/extra_review_detail", require("./routes/extra_review_detail"));
 app.use("/api/extra_review_edit", require("./routes/extra_review_edit"));
 
 //취업 후기 글
 app.use("/api/job_review_list", require("./routes/job_review_list"));
-app.use("/api/job_review_write", require("./routes/job_review"));
+app.use("/api/job_review", require("./routes/job_review"));
 app.use("/api/job_review_detail", require("./routes/job_review_detail"));
 app.use("/api/job_review_edit", require("./routes/job_review_edit"));
 
@@ -95,12 +94,12 @@ app.use("/api/download", require("./routes/download"));
 
 //교육/공모전 글
 app.use("/api/edu_contest_list", require("./routes/edu_contest_list"));
-app.use("/api/edu_contest_write", require("./routes/edu_contest"));
+app.use("/api/edu_contest", require("./routes/edu_contest"));
 app.use("/api/edu_contest_detail", require("./routes/edu_contest_detail"));
 app.use("/api/edu_contest_edit", require("./routes/edu_contest_edit"));
 
 //교육/공모전 댓글
-app.use("/api/edu_contest_comment_write", require("./routes/edu_cont_comment"));
+app.use("/api/edu_contest_comment", require("./routes/edu_cont_comment"));
 app.use(
   "/api/edu_contest_comment_edit",
   require("./routes/edu_contest_comment_edit")

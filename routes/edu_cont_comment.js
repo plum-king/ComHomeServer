@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require("../db.js");
 
 //댓글 저장
-router.post("/", async (req, res) => {
+router.post("/post", async (req, res) => {
   let post = req.body;
   const user = req.user.id;
   const comment = post.content;

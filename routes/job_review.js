@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
 
-router.post("/", async (req, res) => {
+router.post("/post", async (req, res) => {
   const post = req.body;
   const title = post.title;
   const content = post.content;
