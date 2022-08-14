@@ -38,7 +38,6 @@ router.post("/update", upload.single("img"), async (req, res) => {
             `UPDATE edu_contest SET title=?, content=?, img=?, edited_date=?, end_date=? WHERE no=?`,
             [title, content, img, now, end, no]
           );
-
     status = 200;
   } catch (err) {
     console.error(err);
