@@ -17,7 +17,7 @@ const upload = multer({
 });
 
 // 글 작성하기
-router.post("/", upload.single("img"), async (req, res) => {
+router.post("/post", upload.single("img"), async (req, res) => {
   const post = req.body;
   const iduser = post.iduser;
   const title = post.title;
