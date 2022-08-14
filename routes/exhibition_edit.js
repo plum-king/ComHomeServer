@@ -7,9 +7,8 @@ const path = require("path");
 
 //작품전시 글 수정하기
 router.post("/", async (req, res, next) => {
-  console.log(req.params);
-  const id = req.params["0"];
-  const data = await pool.query(`SELECT * FROM exhibition WHERE no=${post.id}`);
+  const no = req.body.no;
+  const data = await pool.query(`SELECT * FROM exhibition WHERE no=${no}`);
   const data_det = data[0][0];
   res.json({data_det: data_det});
 });
@@ -71,18 +70,18 @@ router.post("/update", upload.single("img"), async (req, res) => {
 
   try {
     const data = await pool.query(sql, params);
-    
+
     //작품 전시 알람 ON한 사용자들
     const exhibition_data = await pool.query(
       `SELECT subscribe FROM subscriptions WHERE exhibition and subscribe is not null`
     );
-    
+
     const message = {
       message: `작품 전시 글이 수정되었습니다!`,
     };
     exhibition_data.map((subscribe) => {
-        sendNotification(JSON.parse(subscribe.subscribe), message);
-    })
+      sendNotification(JSON.parse(subscribe.subscribe), message);
+    });
 
     status = 200;
   } catch (err) {

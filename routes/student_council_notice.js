@@ -79,8 +79,10 @@ router.post("/post", fileFields, async (req, res) => {
     post.files.img == undefined ? "" : post.files.img[0].path;
   const sc_notice_file =
     post.files.file == undefined ? "" : post.files.file[0].path;
-  const start_date = post.start_date;
-  const end_date = post.end_date;
+  // const start_date = post.start_date;
+  // const end_date = post.end_date;
+  const start_date = new Date();
+  const end_date = new Date(); //이거 나중에 고치기
   const sql = `INSERT INTO student_council_notice(no, title, content, iduser, upload_time, edited_date, views, img, file_status, start_date, end_date) VALUES(?,?,?,?,?,?,?,?,?,?,?)`;
   const params = [
     sc_notice_id,
@@ -123,11 +125,11 @@ router.post("/post", fileFields, async (req, res) => {
         console.error(err);
       }
     }
+    let no = data[0].insertId;
+    res.json({no: no, data_file: data_file});
   } catch (err) {
     console.error(err);
   }
-  let no = data[0].insertId;
-  res.json({no: no, data_file: data_file});
 });
 
 module.exports = router;
