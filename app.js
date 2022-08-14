@@ -28,6 +28,7 @@ app.get("/", async (req, res) => {
 const getBtn = (user) => {
   return user !== undefined
     ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/api/student_council_notice_list">학생회 공지</a><br><br><a href="/api/mypage">마이페이지</a>`
+
     : `<a href="/api/auth/google">Google Login</a>`;
 };
 
@@ -57,6 +58,12 @@ const getPage = (title, description, auth) => {
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/exhibition", require("./routes/exhibition"));
 app.use("/api/exhibition_edit", require("./routes/exhibition_edit"));
+
+//학과공지 글
+app.use("/api/cs_notice_list", require("./routes/cs_notice_list"));
+app.use("/api/cs_notice", require("./routes/cs_notice"));
+app.use("/api/cs_notice_detail", require("./routes/cs_notice_detail"));
+app.use("/api/cs_notice_edit", require("./routes/cs_notice_edit"));
 
 //대외활동 후기 글
 app.use("/api/extra_review_list", require("./routes/extra_review_list"));
