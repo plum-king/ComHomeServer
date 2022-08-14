@@ -35,7 +35,14 @@ app.get("/", async (req, res) => {
 //프론트 임시로->url 바로 들어가도 된다.
 const getBtn = (user) => {
   return user !== undefined
-    ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/api/student_council_notice_list">학생회 공지</a> <br> <a href = "/api/chat">선배와 채팅하기</a>`
+    ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> 
+    <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> 
+    <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> 
+    <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> 
+    <a href = "/api/student_council_notice_list">학생회 공지</a> <br><br>
+    <a href = "/api/chat">선배와 채팅하기</a> <br><br>
+    <a href = "/api/graduate_interview_list">졸업생 인터뷰(선배들list)</a> <br><br>
+    `
     : `<a href="/api/auth/google">Google Login</a>`;
 };
 
@@ -97,7 +104,9 @@ app.use("/api/student_council_notice_detail", require("./routes/student_council_
 
 //채팅
 app.use("/api/chat", require("./routes/chat"));
-
+//졸업생 인터뷰
+app.use("/api/graduate_interview", require("./routes/graduate_interview"));
+app.use("/api/graduate_interview_list", require("./routes/graduate_interview_list"));
 
 server.listen(port, () => {
   console.log(`Server running on port: ${port}`);
