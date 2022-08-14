@@ -38,6 +38,19 @@ router.post("/update", upload.single("img"), async (req, res) => {
             `UPDATE edu_contest SET title=?, content=?, img=?, edited_date=?, end_date=? WHERE no=?`,
             [title, content, img, now, end, no]
           );
+    //교육 공모전 알람 ON한 사용자들
+    const edu_data = await pool.query(
+      `SELECT subscribe FROM subscriptions WHERE edu_contest and subscribe is not null`
+    );
+    
+    const message = {
+      message: `교육 공모전 글이 수정되었습니다!`,
+    };
+    console.log(edu_data);
+    edu_data.map((subscribe) => {
+      sendNotification(JSON.parse(subscribe.subscribe), message);
+    })
+
     status = 200;
   } catch (err) {
     console.error(err);
