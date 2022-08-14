@@ -15,7 +15,7 @@ router.get("/:edu_contest_no", async (req, res) => {
 
   //조회수 +1
   try {
-    const data = await pool.query(
+    const views = await pool.query(
       "UPDATE edu_contest set views=views+1 where no =? ",
       [edu_contest_no]
     );
