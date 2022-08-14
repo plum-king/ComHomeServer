@@ -42,7 +42,7 @@ router.post("/post", fileFields, async (req, res) => {
   const sql = `INSERT INTO recruit_intern(no, iduser, title, content, upload_time, edited_date, views, img, file_status) VALUES(?,?,?,?,?,?,?,?,?)`;
   const params = [
     notice_id,
-    req.user.id,
+    req.body.iduser,
     title,
     cont,
     date,

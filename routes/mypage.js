@@ -4,7 +4,7 @@ const pool = require("../db.js");
 
 //마이페이지 띄우기
 router.get("/", async (req, res) => {
-  const user = req.user.id;
+  const user = req.body.iduser;
 
   try {
     // 내 정보 보이기

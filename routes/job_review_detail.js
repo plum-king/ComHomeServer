@@ -11,7 +11,7 @@ router.get("/:review_no", async (req, res) => {
     review_no,
   ]);
   const scrap = await pool.query(`SELECT * FROM scrap where iduser =?`, [
-    req.user.id,
+    req.body.iduser,
   ]);
   let data_det = data[0][0];
 

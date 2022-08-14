@@ -17,7 +17,7 @@ const upload = multer({
 });
 
 router.post("/post", upload.single("img"), async (req, res) => {
-  const userid = req.user.id;
+  const userid = req.body.iduser;
   const post = req.body;
   const exh_title = post.title;
   const exh_content = post.content;

@@ -5,7 +5,7 @@ const pool = require("../db.js");
 //댓글 저장
 router.post("/post", async (req, res) => {
   let post = req.body;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const comment = post.content;
   const cont_no = post.edu_contest_no;
   const my_secret_checkbox = post.my_secret_checkbox ? 1 : 0;

@@ -10,7 +10,7 @@ router.post("/post", async (req, res) => {
   try {
     const data = await pool.query(
       `INSERT INTO extra_review(title, content, iduser) VALUES(?, ?, ?)`,
-      [title, content, req.user.id]
+      [title, content, req.body.iduser]
     );
 
     //알람

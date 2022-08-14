@@ -4,7 +4,7 @@ const pool = require("../db.js");
 
 router.post("/edu_contest", async (req, res) => {
   let post = req.body;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const no = post.no;
   const type = post.type;
   let status = 404;
@@ -21,7 +21,7 @@ router.post("/edu_contest", async (req, res) => {
 
 router.post("/edu_contest_cancel", async (req, res) => {
   let post = req.body;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const type = post.type;
   const no = post.no;
 
@@ -37,7 +37,7 @@ router.post("/edu_contest_cancel", async (req, res) => {
 
 router.post("/recruit_intern", async (req, res) => {
   let post = req.body;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const type = post.type;
   const no = post.no;
 
@@ -53,7 +53,7 @@ router.post("/recruit_intern", async (req, res) => {
 
 router.post("/recruit_intern_cancel", async (req, res) => {
   let post = req.body;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const type = post.type;
   const no = post.no;
 
@@ -70,7 +70,7 @@ router.post("/recruit_intern_cancel", async (req, res) => {
 //아직 안함, html 구조 이해 못함 + ddl문 받으면 추가하기
 router.post("/exhibition", async (req, res) => {
   let post = req.body;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const type = post.type;
   const no = post.no;
 
@@ -87,7 +87,7 @@ router.post("/exhibition", async (req, res) => {
 router.post("/exhibition_cancel", async (req, res) => {
   let post = req.body;
   const type = post.type;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const no = post.no;
 
   try {
@@ -103,7 +103,7 @@ router.post("/exhibition_cancel", async (req, res) => {
 
 router.post("/job_review", async (req, res) => {
   let post = req.body;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const type = post.type;
   const no = post.no;
 
@@ -120,7 +120,7 @@ router.post("/job_review", async (req, res) => {
 router.post("/job_review_cancel", async (req, res) => {
   let post = req.body;
   const type = post.type;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const no = post.no;
 
   try {
@@ -135,7 +135,7 @@ router.post("/job_review_cancel", async (req, res) => {
 
 router.post("/extra_review", async (req, res) => {
   let post = req.body;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const type = post.type;
   const no = post.no;
 
@@ -152,7 +152,7 @@ router.post("/extra_review", async (req, res) => {
 router.post("/extra_review_cancel", async (req, res) => {
   let post = req.body;
   const type = post.type;
-  const user = req.user.id;
+  const user = req.body.iduser;
   const no = post.no;
 
   try {

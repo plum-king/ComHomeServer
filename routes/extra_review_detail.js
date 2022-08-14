@@ -10,7 +10,7 @@ router.get("/:review_no", async (req, res) => {
     review_no,
   ]);
   const scrap = await pool.query(`SELECT * FROM scrap where iduser =?`, [
-    req.user.id,
+    req.body.iduser,
   ]);
   //조회수 +1
   try {
