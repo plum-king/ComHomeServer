@@ -3,7 +3,8 @@ const router = express.Router();
 const pool = require("../db.js");
 const multer = require("multer");
 const path = require("path");
-const { sendNotification } = require("./push.js");
+const date_fns = require("date-fns");
+const {sendNotification} = require("./push.js");
 
 //이미지 업로드를 위한 multer
 const upload = multer({
@@ -29,7 +30,7 @@ router.post("/update", fileFields, async (req, res) => {
   const date = new Date();
   const title = edit.title;
   const cont = edit.content;
-  const notice_img = req.files.img == undefined ? "" : req.files.img[0].path;
+  const notice_img = edit.files.img == undefined ? "" : edit.files.img[0].path;
   let status = 404;
   const sql1 =
     "UPDATE cs_notice SET title=?, content=?, edited_date=?, img=? WHERE no=?";
@@ -47,16 +48,16 @@ router.post("/update", fileFields, async (req, res) => {
   try {
     const data = await pool.query(sql, params);
 
-    //학과 공지 알람 ON한 사용자들
-    const cs_data = await pool.query(
-      `SELECT subscribe FROM subscriptions WHERE cs_notice and subscribe is not null`
-    );
-    const message = {
-      message: `학과 공지 글이 수정되었습니다!`,
-    };
-    cs_data.map((subscribe) => {
-        sendNotification(JSON.parse(subscribe.subscribe), message);
-    })
+    // //학과 공지 알람 ON한 사용자들
+    // const cs_data = await pool.query(
+    //   `SELECT subscribe FROM subscriptions WHERE cs_notice and subscribe is not null`
+    // );
+    // const message = {
+    //   message: `학과 공지 글이 수정되었습니다!`,
+    // };
+    // cs_data.map((subscribe) => {
+    //   sendNotification(JSON.parse(subscribe.subscribe), message);
+    // });
 
     status = 200;
   } catch (err) {

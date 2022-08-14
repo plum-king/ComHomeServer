@@ -21,7 +21,7 @@ router.get("/:notice_id", async (req, res) => {
     ]);
 
     res.json({
-      data: data,
+      data_det: data[0][0],
       data_file: data_file,
     });
   } catch (err) {

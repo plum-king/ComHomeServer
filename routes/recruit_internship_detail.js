@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
-const templates = require("../lib/templates");
 const path = require("path");
+const date_fns = require("date-fns");
 
 router.get("/:notice_id", async (req, res) => {
   const notice_id = path.parse(req.params.notice_id).base;
@@ -23,7 +23,7 @@ router.get("/:notice_id", async (req, res) => {
       [notice_id]
     );
     res.json({
-      data: data[0][0],
+      data_det: data[0][0],
       data_file: data_file,
     });
   } catch (err) {

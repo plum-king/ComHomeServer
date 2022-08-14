@@ -3,7 +3,8 @@ const router = express.Router();
 const pool = require("../db.js");
 const multer = require("multer");
 const path = require("path");
-const { sendNotification } = require("./push.js");
+const {sendNotification} = require("./push.js");
+const date_fns = require("date-fns");
 
 //이미지 업로드를 위한 multer
 const upload = multer({
@@ -56,17 +57,17 @@ router.post("/post", fileFields, async (req, res) => {
   try {
     const data = await pool.query(sql, params);
 
-    //알람
-    //채용인턴십 알람 ON한 사용자들
-    const recruit_data = await pool.query(
-      `SELECT subscribe FROM subscriptions WHERE recruit_intern and subscribe is not null`
-    );
-    const message = {
-      message: `채용 인턴십 글이 새로 올라왔습니다!`,
-    };
-    recruit_data.map((subscribe) => {
-        sendNotification(JSON.parse(subscribe.subscribe), message);
-    })
+    // //알람
+    // //채용인턴십 알람 ON한 사용자들
+    // const recruit_data = await pool.query(
+    //   `SELECT subscribe FROM subscriptions WHERE recruit_intern and subscribe is not null`
+    // );
+    // const message = {
+    //   message: `채용 인턴십 글이 새로 올라왔습니다!`,
+    // };
+    // recruit_data.map((subscribe) => {
+    //     sendNotification(JSON.parse(subscribe.subscribe), message);
+    // })
 
     //첨부파일 table에 저장
     for (let i = 0; i < count; i++) {
@@ -75,11 +76,11 @@ router.post("/post", fileFields, async (req, res) => {
         [notice_id, post.files.file[i].path, post.files.file[i].originalname]
       );
     }
+    let no = data[0].insertId;
+    res.json({no: no, data_file: data_file});
   } catch (err) {
     console.error(err);
   }
-  let no = data[0].insertId;
-  res.json({no: no, data_file: data_file});
 });
 
 module.exports = router;

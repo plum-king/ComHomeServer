@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
-const templates = require("../lib/templates");
-const multer = require("multer");
-const path = require("path");
 
 //채용/인턴십 목록보기
 router.get("/", async (req, res) => {

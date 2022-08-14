@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
 const path = require("path");
+const date_fns = require("date-fns");
+
 
 router.get("/:edu_contest_no", async (req, res) => {
   const edu_contest_no = path.parse(req.params.edu_contest_no).base;
@@ -40,7 +42,7 @@ router.get("/:edu_contest_no", async (req, res) => {
     i++;
   }
   res.json({
-    data: data[0][0],
+    data_det: data[0][0],
     comment: comment[0],
   });
 });

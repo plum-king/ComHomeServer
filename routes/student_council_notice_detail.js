@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("../config/passport.js");
 const pool = require("../db.js");
-const templates = require("../lib/templates");
 const path = require("path");
+const date_fns = require("date-fns");
 
 router.get("/:sc_notice_no", async (req, res) => {
   const sc_notice_no = path.parse(req.params.sc_notice_no).base;
@@ -22,11 +21,11 @@ router.get("/:sc_notice_no", async (req, res) => {
     `SELECT * FROM student_council_notice where no = ?`,
     [sc_notice_no]
   );
-  const file_data = await pool.query(`SELECT * FROM file_sc where no = ?`, [
+  const data_file = await pool.query(`SELECT * FROM file_sc where no = ?`, [
     sc_notice_no,
   ]);
   const data_det = data[0][0];
-  res.json({data_det:data_det, file_data:file_data});
+  res.json({data_det: data_det, data_file: data_file});
 });
 
 module.exports = router;

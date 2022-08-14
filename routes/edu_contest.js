@@ -3,7 +3,8 @@ const router = express.Router();
 const pool = require("../db.js");
 const multer = require("multer");
 const path = require("path");
-const { sendNotification } = require("./push.js");
+const date_fns = require("date-fns");
+const {sendNotification} = require("./push.js");
 
 //이미지 업로드를 위한 multer
 const upload = multer({
@@ -24,16 +25,16 @@ router.post("/post", upload.single("img"), async (req, res) => {
   const title = post.title;
   const content = post.content;
   const end_date = post.end_date;
-  const img = req.file == undefined ? "" : req.file.path;
+  const img = post.files.img == undefined ? "" : post.files.img[0].path;
+  const now = new Date();
   try {
     const data = await pool.query(
-      `INSERT INTO edu_contest(title, content, img, iduser, end_date) VALUES(?, ?, ?, ?, ?)`,
-      [title, content, img, iduser, end_date] //iduser 나중에 바꾸기
+      `INSERT INTO edu_contest(title, content, edited_date, img, views, iduser, end_date) VALUES(?, ?, ?, ?, ?, ?, ?)`,
+      [title, content, now, img, 0, iduser, end_date] //iduser 나중에 바꾸기
     );
     let no = data[0].insertId;
     res.json({
       no: no,
-      // data: data[0][0],
     });
   } catch (err) {
     console.error(err);
@@ -59,8 +60,8 @@ router.post("/expire", async (req, res) => {
     };
     console.log(edu_data);
     edu_data.map((subscribe) => {
-        sendNotification(JSON.parse(subscribe.subscribe), message);
-    })
+      sendNotification(JSON.parse(subscribe.subscribe), message);
+    });
     res.json({
       no: no,
     });

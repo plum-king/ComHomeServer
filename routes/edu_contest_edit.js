@@ -3,7 +3,8 @@ const router = express.Router();
 const pool = require("../db.js");
 const multer = require("multer");
 const path = require("path");
-const { sendNotification } = require("./push.js");
+const date_fns = require("date-fns");
+const {sendNotification} = require("./push.js");
 
 //이미지 업로드를 위한 multer
 const upload = multer({
@@ -25,12 +26,12 @@ router.post("/update", upload.single("img"), async (req, res) => {
   const end_date = req.body.end_date;
   const now = new Date();
   const end = new Date(end_date);
-  const img = req.file == undefined ? "" : req.file.path;
+  const img = req.body.files.img == undefined ? "" : req.body.files.img[0].path;
   let status = 404;
 
   try {
     let sql =
-      req.file == undefined
+      req.body.files.img == undefined
         ? await pool.query(
             "UPDATE edu_contest SET title=?, content=?, edited_date=?, end_date=? WHERE no=?",
             [title, content, now, end, no]
@@ -43,13 +44,13 @@ router.post("/update", upload.single("img"), async (req, res) => {
     const edu_data = await pool.query(
       `SELECT subscribe FROM subscriptions WHERE edu_contest and subscribe is not null`
     );
-    
+
     const message = {
       message: `교육 공모전 글이 수정되었습니다!`,
     };
     edu_data.map((subscribe) => {
       sendNotification(JSON.parse(subscribe.subscribe), message);
-    })
+    });
 
     status = 200;
   } catch (err) {

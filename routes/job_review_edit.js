@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
-const { sendNotification } = require("./push.js");
+const {sendNotification} = require("./push.js");
+const date_fns = require("date-fns");
 
 //수정한 글 db에 저장
 router.post("/update", async (req, res) => {
@@ -21,14 +22,14 @@ router.post("/update", async (req, res) => {
     const job_data = await pool.query(
       `SELECT subscribe FROM subscriptions WHERE job_review and subscribe is not null`
     );
-    
+
     const message = {
       message: `취업 후기 글이 수정되었습니다!`,
     };
     job_data.map((subscribe) => {
-        sendNotification(JSON.parse(subscribe.subscribe), message);
-    })
-    
+      sendNotification(JSON.parse(subscribe.subscribe), message);
+    });
+
     status = 200;
   } catch (err) {
     console.error(err);

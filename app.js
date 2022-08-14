@@ -5,7 +5,7 @@ const passport = require("passport");
 const session = require("express-session");
 const cors = require("cors");
 const pool = require("./db.js");
-const { publicKey, sendNotification } = require("./routes/push");
+const {publicKey, sendNotification} = require("./routes/push");
 
 app.use(cors());
 app.use(session({secret: "MySecret", resave: false, saveUninitialized: true}));
@@ -66,6 +66,8 @@ const getPage = (title, description, auth) => {
 
 //routes
 app.use("/api/auth", require("./routes/auth"));
+
+//작품 전시글
 app.use("/api/exhibition", require("./routes/exhibition"));
 app.use("/api/exhibition_edit", require("./routes/exhibition_edit"));
 

@@ -14,16 +14,16 @@ router.get("/:review_no", async (req, res) => {
   ]);
   //조회수 +1
   try {
-    const data = await pool.query(
-      "UPDATE recruit_intern set views=views+1 where no =? ",
+    const views = await pool.query(
+      "UPDATE extra_review set views=views+1 where no =? ",
       [review_no]
     );
+
+    const data_det = data[0][0];
+    res.json({data_det: data_det});
   } catch (err) {
     console.error(err);
   }
-
-  const data_det = data[0][0];
-  res.json({data_det: data_det});
 });
 
 module.exports = router;
