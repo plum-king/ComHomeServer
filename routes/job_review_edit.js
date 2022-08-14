@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
+const { sendNotification } = require("./push.js");
 
 //수정한 글 db에 저장
 router.post("/update", async (req, res) => {
