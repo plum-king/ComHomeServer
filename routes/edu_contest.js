@@ -27,12 +27,12 @@ router.post("/post", upload.single("img"), async (req, res) => {
   try {
     const data = await pool.query(
       `INSERT INTO edu_contest(title, content, img, iduser, end_date) VALUES(?, ?, ?, ?, ?)`,
-      [title, content, img, "iduser", end_date] //iduser 나중에 바꾸기
+      [title, content, img, iduser, end_date] //iduser 나중에 바꾸기
     );
     let no = data[0].insertId;
     res.json({
       no: no,
-      data: data[0][0],
+      // data: data[0][0],
     });
   } catch (err) {
     console.error(err);

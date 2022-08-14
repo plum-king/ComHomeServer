@@ -10,7 +10,7 @@ router.get("/:notice_id", async (req, res) => {
   //조회수 +1
   try {
     const views = await pool.query(
-      "UPDATE recruit_intern set not_views=not_views+1 where no =? ",
+      "UPDATE recruit_intern set views=views+1 where no =? ",
       [notice_id]
     );
 

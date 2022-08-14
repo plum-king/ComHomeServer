@@ -24,7 +24,6 @@ const fileFields = upload.fields([
 router.post("/post", fileFields, async (req, res) => {
   const post = req.body;
   const {img, file} = post.files;
-  let status = 404;
 
   let count; //파일개수
   if (post.files.file) {
@@ -61,13 +60,10 @@ router.post("/post", fileFields, async (req, res) => {
         [notice_id, post.files.file[i].path, post.files.file[i].originalname]
       );
     }
-    status = 200;
   } catch (err) {
     console.error(err);
   }
-  res.json({
-    status: status,
-  });
+  res.json({no: no, data_file: data_file});
 });
 
 module.exports = router;

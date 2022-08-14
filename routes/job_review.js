@@ -6,7 +6,6 @@ router.post("/post", async (req, res) => {
   const post = req.body;
   const title = post.title;
   const content = post.content;
-  let status = 404;
   const now = new Date();
 
   try {
@@ -14,13 +13,11 @@ router.post("/post", async (req, res) => {
       `INSERT INTO job_review(title, content, edited_date, iduser) VALUES(?, ?, ?, ?)`,
       [title, content, now, iduser]
     );
-    status = 200;
   } catch (err) {
     console.error(err);
   }
-  res.json({
-    status: status,
-  });
+  let no = data[0].insertId;
+  res.json({no: no});
 });
 
 module.exports = router;

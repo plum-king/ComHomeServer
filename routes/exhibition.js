@@ -27,7 +27,6 @@ router.post("/post", upload.single("img"), async (req, res) => {
   const link_github = post.link_github;
   const link_service = post.link_service;
   const exh_img = req.file == undefined ? "" : req.file.path;
-  let status = 404;
 
   const sql =
     "INSERT INTO exhibition (iduser, title, content, img, award, contestName, link_github, link_service) VALUES (?, ?, ?, ?, ?, ? ,? ,?)";
@@ -44,13 +43,11 @@ router.post("/post", upload.single("img"), async (req, res) => {
 
   try {
     const data = await pool.query(sql, params);
-    status = 200;
   } catch (err) {
     console.error(err);
   }
-  res.json({
-    status: status,
-  });
+  let no = data[0].insertId;
+  res.json({no: no});
 });
 
 module.exports = router;
