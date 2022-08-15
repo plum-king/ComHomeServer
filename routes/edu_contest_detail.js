@@ -4,16 +4,25 @@ const pool = require("../db.js");
 const path = require("path");
 const date_fns = require("date-fns");
 
-
 router.get("/:edu_contest_no", async (req, res) => {
   const edu_contest_no = path.parse(req.params.edu_contest_no).base;
-
+  let scrap = false;
   const data = await pool.query(`SELECT * FROM edu_contest where no = ?`, [
     edu_contest_no,
   ]);
-  const scrap = await pool.query(`SELECT * FROM scrap where iduser =?`, [
+  const scrap_det = await pool.query(`SELECT * FROM scrap where iduser =?`, [
     req.body.iduser,
   ]);
+
+  for (let i = 0; i < scrap_det[0].length; i++) {
+    if (
+      scrap_det[0][i].type == "edu_contest" &&
+      scrap_det[0][i].no == edu_contest_no
+    ) {
+      scrap = true;
+      break;
+    }
+  }
 
   //조회수 +1
   try {
@@ -44,6 +53,7 @@ router.get("/:edu_contest_no", async (req, res) => {
   res.json({
     data_det: data[0][0],
     comment: comment[0],
+    scrap: scrap,
   });
 });
 

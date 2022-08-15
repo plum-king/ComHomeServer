@@ -6,6 +6,20 @@ const path = require("path");
 const {sendNotification} = require("./push.js");
 const date_fns = require("date-fns");
 
+//작품전시 list 보이기
+router.get("/", async (req, res) => {
+  if (req.user) {
+    let data;
+    try {
+      data = await pool.query("select * from exhibition");
+    } catch (err) {
+      console.error(err);
+    }
+    let date_det = data[0];
+    res.json({date_det: date_det});
+  }
+});
+
 //이미지 업로드를 위한 multer
 const upload = multer({
   storage: multer.diskStorage({
