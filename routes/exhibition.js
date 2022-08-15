@@ -14,8 +14,8 @@ router.get('/', async (req, res) => {
     } catch (err) {
       console.error(err);
     }
-    let date_det=data[0];
-    res.json({date_det: date_det});
+    let data_det=data[0];
+    res.json({data_det: data_det});
 });
 
 
