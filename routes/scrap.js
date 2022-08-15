@@ -7,12 +7,13 @@ router.post("/edu_contest", async (req, res) => {
   const user = req.body.iduser;
   const no = post.no;
   const type = post.type;
+  const title = post.title;
   let status = 404;
 
   try {
     const edu_contest_scrap = await pool.query(
-      `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
-      [user, type, no]
+      `INSERT INTO scrap(iduser,type,no, title) VALUES (?, ?, ?, ?)`,
+      [user, type, no, title]
     );
   } catch (err) {
     console.error(err);
@@ -39,12 +40,13 @@ router.post("/recruit_intern", async (req, res) => {
   let post = req.body;
   const user = req.body.iduser;
   const type = post.type;
+  const title = post.title;
   const no = post.no;
 
   try {
     const recruit_intern_scrap = await pool.query(
-      `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
-      [user, type, no]
+      `INSERT INTO scrap(iduser,type,no, title) VALUES (?, ?, ?, ?)`,
+      [user, type, no, title]
     );
   } catch (err) {
     console.error(err);
@@ -105,12 +107,13 @@ router.post("/job_review", async (req, res) => {
   let post = req.body;
   const user = req.body.iduser;
   const type = post.type;
+  const title = post.title;
   const no = post.no;
 
   try {
     const job_review_scrap = await pool.query(
-      `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
-      [user, type, no]
+      `INSERT INTO scrap(iduser,type,no, title) VALUES (?, ?, ?, ?)`,
+      [user, type, no, title]
     );
   } catch (err) {
     console.error(err);
@@ -137,12 +140,13 @@ router.post("/extra_review", async (req, res) => {
   let post = req.body;
   const user = req.body.iduser;
   const type = post.type;
+  const title = post.title;
   const no = post.no;
 
   try {
     const extra_review_scrap = await pool.query(
-      `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
-      [user, type, no]
+      `INSERT INTO scrap(iduser,type,no, title) VALUES (?, ?, ?, ?)`,
+      [user, type, no, title]
     );
   } catch (err) {
     console.error(err);

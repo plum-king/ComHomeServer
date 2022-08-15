@@ -4,7 +4,7 @@ const pool = require("../db.js");
 
 //마이페이지 띄우기
 router.get("/", async (req, res) => {
-  const user = req.body.iduser;
+  const user = req.query.iduser;
 
   try {
     // 내 정보 보이기
@@ -42,7 +42,10 @@ router.get("/", async (req, res) => {
       [user]
     );
 
-    //스크랩 추가하기
+    //스크랩
+    const scrap = await pool.query(`SELECT * FROM scrap where iduser = ?`, [
+      user,
+    ]);
 
     res.json({
       student_id: student_id,
@@ -51,6 +54,7 @@ router.get("/", async (req, res) => {
       edu_contest: edu_contest[0],
       exhibition: exhibition[0],
       edu_contest_comment: edu_contest_comment[0],
+      scrap: scrap[0],
     });
   } catch (err) {
     console.error(err);
