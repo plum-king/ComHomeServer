@@ -8,7 +8,6 @@ const date_fns = require("date-fns");
 
 //작품전시 list 보이기
 router.get('/', async (req, res) => {
-  if(req.user){
     let data;
     try {
       data = await pool.query("select * from exhibition");
@@ -17,7 +16,6 @@ router.get('/', async (req, res) => {
     }
     let date_det=data[0];
     res.json({date_det: date_det});
-  }
 });
 
 
