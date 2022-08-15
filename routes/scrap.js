@@ -67,48 +67,15 @@ router.post("/recruit_intern_cancel", async (req, res) => {
   }
 });
 
-//아직 안함, html 구조 이해 못함 + ddl문 받으면 추가하기
-router.post("/exhibition", async (req, res) => {
-  let post = req.body;
-  const user = req.body.iduser;
-  const type = post.type;
-  const no = post.no;
-
-  try {
-    const exhibition_scrap = await pool.query(
-      `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
-      [user, type, no]
-    );
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-router.post("/exhibition_cancel", async (req, res) => {
-  let post = req.body;
-  const type = post.type;
-  const user = req.body.iduser;
-  const no = post.no;
-
-  try {
-    const scrap_cancel = await pool.query(
-      `DELETE FROM scrap WHERE iduser = ? and type =? and no =?`,
-      [user, type, no]
-    );
-  } catch (err) {
-    console.error(err);
-  }
-});
-// /////////////////////////////////
-
-// router.post("/job_review", async (req, res) => {
+// //아직 안함, html 구조 이해 못함 + ddl문 받으면 추가하기
+// router.post("/exhibition", async (req, res) => {
 //   let post = req.body;
 //   const user = req.body.iduser;
 //   const type = post.type;
 //   const no = post.no;
 
 //   try {
-//     const job_review_scrap = await pool.query(
+//     const exhibition_scrap = await pool.query(
 //       `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
 //       [user, type, no]
 //     );
@@ -117,7 +84,7 @@ router.post("/exhibition_cancel", async (req, res) => {
 //   }
 // });
 
-// router.post("/job_review_cancel", async (req, res) => {
+// router.post("/exhibition_cancel", async (req, res) => {
 //   let post = req.body;
 //   const type = post.type;
 //   const user = req.body.iduser;
@@ -132,6 +99,39 @@ router.post("/exhibition_cancel", async (req, res) => {
 //     console.error(err);
 //   }
 // });
+// // /////////////////////////////////
+
+router.post("/job_review", async (req, res) => {
+  let post = req.body;
+  const user = req.body.iduser;
+  const type = post.type;
+  const no = post.no;
+
+  try {
+    const job_review_scrap = await pool.query(
+      `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
+      [user, type, no]
+    );
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+router.post("/job_review_cancel", async (req, res) => {
+  let post = req.body;
+  const type = post.type;
+  const user = req.body.iduser;
+  const no = post.no;
+
+  try {
+    const scrap_cancel = await pool.query(
+      `DELETE FROM scrap WHERE iduser = ? and type =? and no =?`,
+      [user, type, no]
+    );
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 router.post("/extra_review", async (req, res) => {
   let post = req.body;
