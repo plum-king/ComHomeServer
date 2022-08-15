@@ -25,7 +25,7 @@ router.get("/:sc_notice_no", async (req, res) => {
     sc_notice_no,
   ]);
   const data_det = data[0][0];
-  res.json({data_det: data_det, data_file: data_file});
+  res.json({data_det: data_det});  //, data_file: data_file
 });
 
 module.exports = router;

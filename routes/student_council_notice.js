@@ -61,31 +61,35 @@ router.post("/post", fileFields, async (req, res) => {
   try {
     const data = await pool.query(sql, params);
 
-    // //알람
-    // //학생회 공지 알람 ON한 사용자들
-    // const subscribe_data = await pool.query(
-    //   `SELECT subscribe FROM subscriptions WHERE student_council_notice and subscribe is not null`
-    // );
-    // const message = {
-    //   message: `학생회 공지가 새로 올라왔습니다!`,
-    // };
-    // subscribe_data.map((subscribe) => {
-    //   sendNotification(JSON.parse(subscribe.subscribe), message);
-    // });
+    //알람
+    //학생회 공지 알람 ON한 사용자들
+    const [subscribe_data] = await pool.query(
+      `SELECT subscribe FROM subscriptions WHERE student_council_notice and subscribe is not null`
+    );
+    const message = {
+      message: `학생회 공지가 새로 올라왔습니다!`,
+    };
+    subscribe_data.map((subscribe) => {
+      try{
+        sendNotification(JSON.parse(subscribe.subscribe), message);
+      } catch(err) {
+        console.error(err);
+      }
+    });
 
-    //첨부파일 table에 저장
-    for (let i = 0; i < count; i++) {
-      const data_file = await pool.query(
-        `INSERT INTO file_sc(no, file_infoN, file_originN) VALUES(?,?,?)`,
-        [
-          sc_notice_id,
-          req.body.files.file[i].path,
-          req.body.files.file[i].originalname,
-        ]
-      );
-    }
+    // //첨부파일 table에 저장
+    // for (let i = 0; i < count; i++) {
+    //   const data_file = await pool.query(
+    //     `INSERT INTO file_sc(no, file_infoN, file_originN) VALUES(?,?,?)`,
+    //     [
+    //       sc_notice_id,
+    //       req.body.files.file[i].path,
+    //       req.body.files.file[i].originalname,
+    //     ]
+    //   );
+    // }
     let no = data[0].insertId;
-    res.json({no: no, data_file: data_file});
+    res.json({no: no});//, data_file: data_file
   } catch (err) {
     console.error(err);
   }

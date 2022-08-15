@@ -82,7 +82,7 @@ router.post("/update", upload.single("img"), async (req, res) => {
     const data = await pool.query(sql, params);
 
     //작품 전시 알람 ON한 사용자들
-    const exhibition_data = await pool.query(
+    const [exhibition_data] = await pool.query(
       `SELECT subscribe FROM subscriptions WHERE exhibition and subscribe is not null`
     );
 
