@@ -11,8 +11,9 @@ router.get("/:edu_contest_no", async (req, res) => {
     edu_contest_no,
   ]);
   const scrap_det = await pool.query(`SELECT * FROM scrap where iduser =?`, [
-    req.body.iduser,
+    req.query.iduser,
   ]);
+  // req.user.iduser 로 받을 수 있는지 확인하기
 
   for (let i = 0; i < scrap_det[0].length; i++) {
     if (

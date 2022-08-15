@@ -8,7 +8,7 @@ router.get("/:notice_id", async (req, res) => {
   const notice_id = path.parse(req.params.notice_id).base;
   let scrap = false;
   const scrap_det = await pool.query(`SELECT * FROM scrap where iduser =?`, [
-    req.body.iduser,
+    req.query.iduser,
   ]);
   for (let i = 0; i < scrap_det[0].length; i++) {
     if (

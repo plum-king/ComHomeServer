@@ -27,7 +27,7 @@ router.post("/edu_contest_cancel", async (req, res) => {
 
   try {
     const scrap_cancel = await pool.query(
-      `DELETE FROM scrap WHERE iduser = ?, type =?, no =?`,
+      `DELETE FROM scrap WHERE iduser = ? and type =? and no =?`,
       [user, type, no]
     );
   } catch (err) {
@@ -59,7 +59,7 @@ router.post("/recruit_intern_cancel", async (req, res) => {
 
   try {
     const scrap_cancel = await pool.query(
-      `DELETE FROM scrap WHERE iduser = ?, type =?, no =?`,
+      `DELETE FROM scrap WHERE iduser = ? and type =? and no =?`,
       [user, type, no]
     );
   } catch (err) {
@@ -92,46 +92,46 @@ router.post("/exhibition_cancel", async (req, res) => {
 
   try {
     const scrap_cancel = await pool.query(
-      `DELETE FROM scrap WHERE iduser = ?, type =?, no =?`,
+      `DELETE FROM scrap WHERE iduser = ? and type =? and no =?`,
       [user, type, no]
     );
   } catch (err) {
     console.error(err);
   }
 });
-/////////////////////////////////
+// /////////////////////////////////
 
-router.post("/job_review", async (req, res) => {
-  let post = req.body;
-  const user = req.body.iduser;
-  const type = post.type;
-  const no = post.no;
+// router.post("/job_review", async (req, res) => {
+//   let post = req.body;
+//   const user = req.body.iduser;
+//   const type = post.type;
+//   const no = post.no;
 
-  try {
-    const job_review_scrap = await pool.query(
-      `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
-      [user, type, no]
-    );
-  } catch (err) {
-    console.error(err);
-  }
-});
+//   try {
+//     const job_review_scrap = await pool.query(
+//       `INSERT INTO scrap(iduser,type,no) VALUES (?, ?, ?)`,
+//       [user, type, no]
+//     );
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
 
-router.post("/job_review_cancel", async (req, res) => {
-  let post = req.body;
-  const type = post.type;
-  const user = req.body.iduser;
-  const no = post.no;
+// router.post("/job_review_cancel", async (req, res) => {
+//   let post = req.body;
+//   const type = post.type;
+//   const user = req.body.iduser;
+//   const no = post.no;
 
-  try {
-    const scrap_cancel = await pool.query(
-      `DELETE FROM scrap WHERE iduser = ?, type =?, no =?`,
-      [user, type, no]
-    );
-  } catch (err) {
-    console.error(err);
-  }
-});
+//   try {
+//     const scrap_cancel = await pool.query(
+//       `DELETE FROM scrap WHERE iduser = ? and type =? and no =?`,
+//       [user, type, no]
+//     );
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
 
 router.post("/extra_review", async (req, res) => {
   let post = req.body;
@@ -157,7 +157,7 @@ router.post("/extra_review_cancel", async (req, res) => {
 
   try {
     const scrap_cancel = await pool.query(
-      `DELETE FROM scrap WHERE iduser = ?, type =?, no =?`,
+      `DELETE FROM scrap WHERE iduser = ? and type =? and no =?`,
       [user, type, no]
     );
   } catch (err) {
