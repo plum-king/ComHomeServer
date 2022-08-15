@@ -34,18 +34,24 @@ router.post("/update", upload.single("img"), async (req, res) => {
   const exh_content = post.content;
   const exh_award = post.award;
   const exh_contestName = post.contestName;
-  const exh_img = req.file == undefined ? "" : req.file.path;
+  const stack = post.stack;
+  const keyword = post.keyword;
+  const team = post.team;  
   const link_github = post.link_github;
   const link_service = post.link_service;
+  const exh_img = req.file == undefined ? "" : req.file.path;
   let status = 404;
 
   const sql1 =
-    "UPDATE exhibition SET title=?, content=?, img=?, award=?, contestName=?, link_github=? , link_service=? WHERE no=?";
+    "UPDATE exhibition SET title=?, content=?, img=?, award=?, stack=?, keyword=?, team=?, contestName=?, link_github=? , link_service=? WHERE no=?";
   const params1 = [
     exh_title,
     exh_content,
     exh_img,
     exh_award,
+    stack,
+    keyword,
+    team,
     exh_contestName,
     link_github,
     link_service,
@@ -54,11 +60,14 @@ router.post("/update", upload.single("img"), async (req, res) => {
 
   //수정할때 이미지 추가 안한경우에는 update문에서 img 속성은 뺴야함
   const sql2 =
-    "UPDATE exhibition SET title=?, content=?, award=?, contestName=?, link_github=? , link_service=? WHERE no=?";
+    "UPDATE exhibition SET title=?, content=?, award=?, stack=?, keyword=?, team=?, contestName=?, link_github=? , link_service=? WHERE no=?";
   const params2 = [
     exh_title,
     exh_content,
     exh_award,
+    stack,
+    keyword,
+    team,
     exh_contestName,
     link_github,
     link_service,
