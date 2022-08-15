@@ -58,7 +58,7 @@ const getPage = (title, description, auth) => {
             <p>${description}</p>
 
             <br> <a href="/api/exhibition">작품전시페이지</a>
-            <br> <a href="/api/recruit_internship_list">채용인턴십페이지</a>
+            <br> <a href="/api/recruit_intern_list">채용인턴십페이지</a>
         </body>
         </html>
         `;
@@ -90,17 +90,17 @@ app.use("/api/job_review_detail", require("./routes/job_review_detail"));
 app.use("/api/job_review_edit", require("./routes/job_review_edit"));
 
 //채용인턴십 글
-app.use("/api/recruit_internship", require("./routes/recruit_internship"));
+app.use("/api/recruit_intern", require("./routes/recruit_internship"));
 app.use(
-  "/api/recruit_internship_list",
+  "/api/recruit_intern_list",
   require("./routes/recruit_internship_list")
 );
 app.use(
-  "/api/recruit_internship_detail",
+  "/api/recruit_intern_detail",
   require("./routes/recruit_internship_detail")
 );
 app.use(
-  "/api/recruit_internship_edit",
+  "/api/recruit_intern_edit",
   require("./routes/recruit_internship_edit")
 );
 app.use("/api/download", require("./routes/download"));
