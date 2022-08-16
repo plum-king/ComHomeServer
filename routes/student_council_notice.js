@@ -181,29 +181,30 @@ router.post("/post", fileFields, async (req, res) => {
     console.log("data : ", data);
 
     // 알람 테스트하려면 홈페이지 들어갈때마다 권한 설정해야해서 귀찮으니까 주석
-    // //알람
-    // //학생회 공지 알람 ON한 사용자들
-    // const [subscribe_data] = await pool.query(
-    //   `SELECT subscribe FROM subscriptions WHERE student_council_notice and subscribe is not null`
-    // );
-    // const message = {
-    //   message: `학생회 공지가 새로 올라왔습니다!`,
-    // };
-    // subscribe_data.map((subscribe) => {
-    //   try{
-    //     sendNotification(JSON.parse(subscribe.subscribe), message);
-    //   } catch(err) {
-    //     console.error(err);
-    //   }
-    // });
+    //알람
+    //학생회 공지 알람 ON한 사용자들
+    const [subscribe_data] = await pool.query(
+      `SELECT subscribe FROM subscriptions WHERE student_council_notice and subscribe is not null`
+    );
+    const message = {
+      message: `학생회 공지가 새로 올라왔습니다!`,
+    };
+    subscribe_data.map((subscribe) => {
+      try{
+        sendNotification(JSON.parse(subscribe.subscribe), message);
+      } catch(err) {
+        console.error(err);
+      }
+    });
 
+    let data_file;
     //첨부파일 table에 저장
     console.log("에러체크 -> newFileName", newFileName);
     for (let i = 0; i < count; i++) {
       console.log("첨부파일 table에 저장 ", i,"번째");
       newFileName = `${Date.now()}_${fileinfo.file[i].originalname}`;
       console.log("newFileName : ", newFileName);
-      const data_file = await pool.query(
+      data_file = await pool.query(
         `INSERT INTO file_sc(no, file_infoN, file_originN) VALUES(?,?,?)`,
         [
           sc_notice_id,
@@ -214,7 +215,7 @@ router.post("/post", fileFields, async (req, res) => {
     }
 
     let no = data[0].insertId;
-    res.json({no: no});//, data_file: data_file ??? <- 정의 안됐는데 어떻게 res보내지
+    res.json({no: no, data_file: data_file});
   } catch (err) {
     console.error(err);
   }

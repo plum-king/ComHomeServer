@@ -68,16 +68,17 @@ router.post("/post", fileFields, async (req, res) => {
         sendNotification(JSON.parse(subscribe.subscribe), message);
     })
 
-    // //첨부파일 table에 저장
-    // for (let i = 0; i < count; i++) {
-    //   const data_file = await pool.query(
-    //     `INSERT INTO file_cs(no, file_infoN, file_originN) VALUES(?,?,?)`,
-    //     [notice_id, post.files.file[i].path, post.files.file[i].originalname]
-    //   );
-    // }
+    let data_file;
+    //첨부파일 table에 저장
+    for (let i = 0; i < count; i++) {
+      const data_file = await pool.query(
+        `INSERT INTO file_cs(no, file_infoN, file_originN) VALUES(?,?,?)`,
+        [notice_id, post.files.file[i].path, post.files.file[i].originalname]
+      );
+    }
     let no = data[0].insertId;
 
-    res.json({no: no});  //, data_file: data_file
+    res.json({no: no, data_file: data_file});
   } catch (err) {
     console.error(err);
   }
