@@ -16,9 +16,17 @@ webpush.setVapidDetails(subject, vapidPublic, vapidPrivate);
  * @param {any} subscription 구독 정보 객체
  * @param {any} data 푸시 알림으로 전달할 데이터 객체
  */
-function sendNotification(subscription, data) {
+async function sendNotification(subscription, data) {
+  try {
     console.log(data);
-    return webpush.sendNotification(subscription, JSON.stringify(data));
+    const result = await webpush.sendNotification(
+      subscription,
+      JSON.stringify(data)
+    );
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 exports.publicKey = vapidPublic;
