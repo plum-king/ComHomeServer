@@ -14,7 +14,7 @@ const http = require('http');
 const server = http.createServer(app);
 const io = require('socket.io')(server);
 
-app.set('socketio', io);  //채팅 router page에서 사용할떄 이거 해야함!!
+//app.set('socketio', io);  //채팅 router page에서 사용할떄 이거 해야함!!
 
 // Passport setting
 app.use(passport.initialize());
@@ -103,8 +103,37 @@ app.use("/api/student_council_notice", require("./routes/student_council_notice"
 app.use("/api/student_council_notice_detail", require("./routes/student_council_notice_detail"));
 
 //채팅
-app.use("/api/chat", require("./routes/chat")); //1대일 채팅
+//app.use("/api/chat", require("./routes/chat")); //1대일 채팅
 app.use("/api/chat", require("./routes/chat_practice_bubble")); //버블(단체) 채팅
+
+io.on('connection', (socket)=>{
+
+  // socket.on("room",(room) => {
+  //     socket.join(room); //join으로 room연결
+  //     console.log("유저 입장")
+  // });
+
+  // 채팅방에 채팅 요청
+  socket.on('req_room_message', (roomnum, sender, msg) => {
+
+      console.log("메시지:"+ msg);
+      io.to(roomnum).emit('noti_room_message', msg);
+
+      const sql="INSERT INTO b_chat (roomid, senderid, message, date) VALUES(?,?,?,?)";
+      const params=[roomnum, sender, msg, new Date()];
+      try{
+        const data= pool.query(sql,params);
+      } catch(err){
+        console.error(err);
+      }
+
+  });
+
+  socket.on('disconnect', async () => {
+      console.log('user disconnected');
+  });
+});
+
 
 //졸업생 인터뷰
 app.use("/api/graduate_interview", require("./routes/graduate_interview"));
