@@ -15,8 +15,9 @@ router.get("/", async (req, res) => {
     } catch (err) {
       console.error(err);
     }
-    let data_det=data[0];
+    let data_det = data[0];
     res.json({data_det: data_det});
+  }
 });
 
 //이미지 업로드를 위한 multer
