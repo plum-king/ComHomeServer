@@ -47,7 +47,7 @@ router.get("/google/callback", passport.authenticate("google"), authSuccess);
 
 function authSuccess(req, res) {
   console.log("req.user : " + JSON.stringify(req.user));
-  res.redirect(`http://localhost:3000/userid/${req.user.id}`);
+  res.redirect(`/api`);
 }
 
 router.post("/userinfo", function (req, res, next) {
