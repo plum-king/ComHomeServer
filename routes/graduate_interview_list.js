@@ -16,8 +16,9 @@ router.get("/", async (req, res) => {
     let data_det = data[0];
 
     while (i < data_det.length) {
-      name= await pool.query( `SELECT name FROM user where iduser=${data_det[i].graduateId}`)
-      body += `<div>${name[0][0].name} 선배님 | ${data_det[i].graduateId}| ${data_det[i].job} | ${data_det[i].schoolId} | ${data_det[i].content}<br></div><hr> `;
+      name= await pool.query( `SELECT name FROM user where iduser=${data_det[i].graduateId}`);
+      
+      body += `<a href = "/api/chat/${data_det[i].no}">${name[0][0].name} 선배님 | ${data_det[i].graduateId}| ${data_det[i].job} | ${data_det[i].schoolId} | ${data_det[i].content}</a><br><hr> `;
       i++;
     }
     body += `<br><a href = "/api/graduate_interview/post">졸업생 인터뷰 등록하기</a> <br> <a href="/"> 홈으로 돌아가기 </a>`;

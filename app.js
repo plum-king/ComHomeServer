@@ -104,7 +104,7 @@ app.use("/api/student_council_notice_detail", require("./routes/student_council_
 
 //채팅
 app.use("/api/chat", require("./routes/chat")); //1대일 채팅
-app.use("/chat", require("./routes/chat_practice_bubble")); //버블(단체) 채팅
+app.use("/api/chat", require("./routes/chat_practice_bubble")); //버블(단체) 채팅
 
 //졸업생 인터뷰
 app.use("/api/graduate_interview", require("./routes/graduate_interview"));
