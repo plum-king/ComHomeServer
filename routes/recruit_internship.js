@@ -26,10 +26,10 @@ const fileFields = upload.fields([
 router.post("/post", fileFields, async (req, res) => {
   //req.setCharacterEncoding("utf-8");
   const post = req.body;
-  const {img, file} = post.files;
+  const {img, file} = req.files;
 
   let count; //파일개수
-  if (post.files.file) {
+  if (req.files.file) {
     count = Object.keys(file).length;
   }
 
@@ -37,9 +37,9 @@ router.post("/post", fileFields, async (req, res) => {
   const notice_id = date % 10000;
   const title = post.title;
   const cont = post.content;
-  const notice_img = post.files.img == undefined ? "" : post.files.img[0].path;
+  const notice_img = req.files.img == undefined ? "" : req.files.img[0].path;
   const notice_file =
-    post.files.file == undefined ? "" : post.files.file[0].path;
+    req.files.file == undefined ? "" : req.files.file[0].path;
 
   let data_file;  
   const sql = `INSERT INTO recruit_intern(no, iduser, title, content, upload_time, edited_date, views, img, file_status) VALUES(?,?,?,?,?,?,?,?,?)`;
@@ -74,7 +74,7 @@ router.post("/post", fileFields, async (req, res) => {
     for (let i = 0; i < count; i++) {
       data_file = await pool.query(
         `INSERT INTO file_intern(no, file_infoN, file_originN) VALUES(?,?,?)`,
-        [notice_id, post.files.file[i].path, post.files.file[i].originalname]
+        [notice_id, req.files.file[i].path, req.files.file[i].originalname]
       );
     }
     let no = data[0].insertId;

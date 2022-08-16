@@ -45,7 +45,7 @@ router.post("/post", upload.single("img"), async (req, res) => {
   const link_github = post.link_github;
   const link_service = post.link_service;
 
-  const exh_img = post.files.img == undefined ? "" : post.files.img[0].path;
+  const exh_img = req.files.img == undefined ? "" : req.files.img[0].path;
 
   const sql =
     "INSERT INTO exhibition (iduser, title, content, img, award, stack, keyword, team, contestName, link_github, link_service) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,?)";

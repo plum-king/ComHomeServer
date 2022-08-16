@@ -26,12 +26,12 @@ router.post("/update", upload.single("img"), async (req, res) => {
   const end_date = req.body.end_date;
   const now = new Date();
   const end = new Date(end_date);
-  const img = req.body.files.img == undefined ? "" : req.body.files.img[0].path;
+  const img = req.files.img == undefined ? "" : req.files.img[0].path;
   let status = 404;
 
   try {
     let sql =
-      req.body.files.img == undefined
+      req.files.img == undefined
         ? await pool.query(
             "UPDATE edu_contest SET title=?, content=?, edited_date=?, end_date=? WHERE no=?",
             [title, content, now, end, no]
