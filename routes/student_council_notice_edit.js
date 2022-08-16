@@ -45,17 +45,17 @@ router.post("/update", upload.single("img"), async (req, res) => {
   try {
     const data = await pool.query(sql, params);
 
-    // //학생회 공지 알람 ON한 사용자들
-    // const subscribe_data = await pool.query(
-    //   `SELECT subscribe FROM subscriptions WHERE student_council_notice and subscribe is not null`
-    // );
+    //학생회 공지 알람 ON한 사용자들
+    const [subscribe_data] = await pool.query(
+      `SELECT subscribe FROM subscriptions WHERE student_council_notice and subscribe is not null`
+    );
 
-    // const message = {
-    //   message: `학생회 공지가 수정되었습니다!`,
-    // };
-    // subscribe_data.map((subscribe) => {
-    //   sendNotification(JSON.parse(subscribe.subscribe), message);
-    // });
+    const message = {
+      message: `학생회 공지가 수정되었습니다!`,
+    };
+    subscribe_data.map((subscribe) => {
+      sendNotification(JSON.parse(subscribe.subscribe), message);
+    });
 
     status = 200;
   } catch (err) {

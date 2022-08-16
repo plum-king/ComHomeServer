@@ -17,6 +17,7 @@ webpush.setVapidDetails(subject, vapidPublic, vapidPrivate);
  * @param {any} data 푸시 알림으로 전달할 데이터 객체
  */
 function sendNotification(subscription, data) {
+    console.log(data);
     return webpush.sendNotification(subscription, JSON.stringify(data));
 }
 

@@ -19,7 +19,7 @@ router.post("/update", async (req, res) => {
     );
 
     //취업 후기 알람 ON한 사용자들
-    const job_data = await pool.query(
+    const [job_data] = await pool.query(
       `SELECT subscribe FROM subscriptions WHERE job_review and subscribe is not null`
     );
 

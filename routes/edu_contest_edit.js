@@ -41,7 +41,7 @@ router.post("/update", upload.single("img"), async (req, res) => {
             [title, content, img, now, end, no]
           );
     //교육 공모전 알람 ON한 사용자들
-    const edu_data = await pool.query(
+    const [edu_data] = await pool.query(
       `SELECT subscribe FROM subscriptions WHERE edu_contest and subscribe is not null`
     );
 

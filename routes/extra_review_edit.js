@@ -19,7 +19,7 @@ router.post("/update", async (req, res) => {
     );
 
     //대외 활동 후기 알람 ON한 사용자들
-    const extra_data = await pool.query(
+    const [extra_data] = await pool.query(
       `SELECT subscribe FROM subscriptions WHERE extra_review and subscribe is not null`
     );
 

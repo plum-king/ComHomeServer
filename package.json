@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ComHomeDev/ComHomeServer#readme",
   "dependencies": {
+    "@google-cloud/storage": "^6.4.0",
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "cheerio": "^1.0.0-rc.12",

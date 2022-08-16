@@ -15,9 +15,8 @@ router.get("/", async (req, res) => {
     } catch (err) {
       console.error(err);
     }
-    let date_det = data[0];
-    res.json({date_det: date_det});
-  }
+    let data_det=data[0];
+    res.json({data_det: data_det});
 });
 
 //이미지 업로드를 위한 multer
@@ -31,13 +30,6 @@ const upload = multer({
     },
   }),
 });
-
-// router.post("/", upload.single("img"), async (req, res) => {
-//   const data = await pool.query(`SELECT * FROM exhibition desc limit 10`);
-//   res.json({
-//     data_det: data[0],
-//   });
-// });
 
 router.post("/post", upload.single("img"), async (req, res) => {
   const userid = req.body.iduser;
@@ -72,15 +64,15 @@ router.post("/post", upload.single("img"), async (req, res) => {
 
   //알람
   //작품 전시 알람 ON한 사용자들
-  // const exhibition_data = await pool.query(
-  //   `SELECT subscribe FROM subscriptions WHERE exhibition and subscribe is not null`
-  // );
-  // const message = {
-  //   message: `작품 전시 글이 새로 올라왔습니다!`,
-  // };
-  // exhibition_data.map((subscribe) => {
-  //   sendNotification(JSON.parse(subscribe.subscribe), message);
-  // });
+  const [exhibition_data] = await pool.query(
+    `SELECT subscribe FROM subscriptions WHERE exhibition and subscribe is not null`
+  );
+  const message = {
+    message: `작품 전시 글이 새로 올라왔습니다!`,
+  };
+  exhibition_data.map((subscribe) => {
+    sendNotification(JSON.parse(subscribe.subscribe), message);
+  });
 
   try {
     const data = await pool.query(sql, params);

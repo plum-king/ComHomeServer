@@ -56,25 +56,26 @@ router.post("/post", fileFields, async (req, res) => {
   try {
     const data = await pool.query(sql, params);
 
-    // //알람
-    // //채용인턴십 알람 ON한 사용자들
-    // const cs_data = await pool.query(
-    //   `SELECT subscribe FROM subscriptions WHERE cs_notice and subscribe is not null`
-    // );
-    // const message = {
-    //   message: `학과 공지글이 새로 올라왔습니다!`,
-    // };
-    // cs_data.map((subscribe) => {
-    //     sendNotification(JSON.parse(subscribe.subscribe), message);
-    // })
+    //알람
+    //채용인턴십 알람 ON한 사용자들
+    const [cs_data] = await pool.query(
+      `SELECT subscribe FROM subscriptions WHERE cs_notice and subscribe is not null`
+    );
+    const message = {
+      message: `학과 공지글이 새로 올라왔습니다!`,
+    };
+    cs_data.map((subscribe) => {
+        sendNotification(JSON.parse(subscribe.subscribe), message);
+    })
 
-    // //첨부파일 table에 저장
-    // for (let i = 0; i < count; i++) {
-    //   const data_file = await pool.query(
-    //     `INSERT INTO file_cs(no, file_infoN, file_originN) VALUES(?,?,?)`,
-    //     [notice_id, post.files.file[i].path, post.files.file[i].originalname]
-    //   );
-    // }
+    let data_file;
+    //첨부파일 table에 저장
+    for (let i = 0; i < count; i++) {
+      const data_file = await pool.query(
+        `INSERT INTO file_cs(no, file_infoN, file_originN) VALUES(?,?,?)`,
+        [notice_id, post.files.file[i].path, post.files.file[i].originalname]
+      );
+    }
     let no = data[0].insertId;
 
     res.json({no: no, data_file: data_file});

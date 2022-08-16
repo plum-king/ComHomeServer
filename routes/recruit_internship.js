@@ -41,6 +41,7 @@ router.post("/post", fileFields, async (req, res) => {
   const notice_file =
     post.files.file == undefined ? "" : post.files.file[0].path;
 
+  let data_file;  
   const sql = `INSERT INTO recruit_intern(no, iduser, title, content, upload_time, edited_date, views, img, file_status) VALUES(?,?,?,?,?,?,?,?,?)`;
   const params = [
     notice_id,
@@ -57,21 +58,21 @@ router.post("/post", fileFields, async (req, res) => {
   try {
     const data = await pool.query(sql, params);
 
-    // //알람
-    // //채용인턴십 알람 ON한 사용자들
-    // const recruit_data = await pool.query(
-    //   `SELECT subscribe FROM subscriptions WHERE recruit_intern and subscribe is not null`
-    // );
-    // const message = {
-    //   message: `채용 인턴십 글이 새로 올라왔습니다!`,
-    // };
-    // recruit_data.map((subscribe) => {
-    //     sendNotification(JSON.parse(subscribe.subscribe), message);
-    // })
+    //알람
+    //채용인턴십 알람 ON한 사용자들
+    const [recruit_data] = await pool.query(
+      `SELECT subscribe FROM subscriptions WHERE recruit_intern and subscribe is not null`
+    );
+    const message = {
+      message: `채용 인턴십 글이 새로 올라왔습니다!`,
+    };
+    recruit_data.map((subscribe) => {
+        sendNotification(JSON.parse(subscribe.subscribe), message);
+    })
 
     //첨부파일 table에 저장
     for (let i = 0; i < count; i++) {
-      const data_file = await pool.query(
+      data_file = await pool.query(
         `INSERT INTO file_intern(no, file_infoN, file_originN) VALUES(?,?,?)`,
         [notice_id, post.files.file[i].path, post.files.file[i].originalname]
       );
