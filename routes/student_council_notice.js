@@ -10,6 +10,15 @@ const {Storage} = require('@google-cloud/storage');
 const Multer = require('multer');
 const {format} = require('util');
 const templates = require("../lib/templates");
+// const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
+const uuid = uuidv4();
+// const imguuid = uuidv4();
+
+let newFileName;
+let sc_notice_id;
+
+const file_date = Date.now();
 
 //테스트용
 router.get("/post", async (req, res) => {
@@ -39,7 +48,7 @@ router.get("/post", async (req, res) => {
         <input type = "date" name = "end_date"/> </label>
         <br>
       <label> 사진: 
-          <input type='file' name='img' accept='image/jpg, image/png, image/jpeg' /></label>
+          <input type='file' name='img' accept='image/jpg, image/png, image/jpeg'/></label>
           <br>
       <label> 파일: 
           <input type='file' name='file' multiple/></label>
@@ -100,9 +109,11 @@ const fileFields = multer.fields([
 //   console.log(`${filename} uploaded to ${bucketName}.`);
 // }
 
-let newFileName;
 
 router.post("/post", fileFields, async (req, res) => {
+  const date = new Date();
+  sc_notice_id = date % 10000;
+
   // let {img, file} = req.files;
   const fileinfo=req.files;
   const { img, file } = fileinfo;
@@ -131,7 +142,7 @@ router.post("/post", fileFields, async (req, res) => {
     console.log("count : ",count);
     for (let i=0;i<count;i++){
       // console.log(fileinfo.file[0]);
-      // console.log("-------");
+      console.log("-------");
       uploadFileToStorage(fileinfo.file[i]).then((success) => {
         // console.log("uploadFileToStorage success")
         // res.status(200).send({
@@ -140,20 +151,15 @@ router.post("/post", fileFields, async (req, res) => {
       }).catch((error) => {
         console.error(error);
       });
-
+      console.log("upload storage 끝");
     }
   }
 
-  const date = new Date();
-  const sc_notice_id = date % 10000;
   const title = post.title;
   const content = post.content;
 
-  console.log("fileinfo.img : ", fileinfo.img);
-  console.log("fileinfo.file : ", fileinfo.file);
-
   //user 조심~~ html에서 하느라 명시적으로 줌~~
-  const sc_notice_img = fileinfo.img == undefined ? "" : fileinfo.img[0].originalname;
+  const sc_notice_img = fileinfo.img == undefined ? null : fileinfo.img[0].originalname;
   const sc_notice_file = fileinfo.file == undefined ? "" : fileinfo.file[0].path;
   const start_date = post.start_date;
   const end_date = post.end_date;
@@ -180,29 +186,28 @@ router.post("/post", fileFields, async (req, res) => {
     const data = await pool.query(sql, params);
     console.log("data : ", data);
 
-    // 알람 테스트하려면 홈페이지 들어갈때마다 권한 설정해야해서 귀찮으니까 주석
-    //알람
-    //학생회 공지 알람 ON한 사용자들
-    const [subscribe_data] = await pool.query(
-      `SELECT subscribe FROM subscriptions WHERE student_council_notice and subscribe is not null`
-    );
-    const message = {
-      message: `학생회 공지가 새로 올라왔습니다!`,
-    };
-    subscribe_data.map((subscribe) => {
-      try{
-        sendNotification(JSON.parse(subscribe.subscribe), message);
-      } catch(err) {
-        console.error(err);
-      }
-    });
+    // // 알람 테스트하려면 홈페이지 들어갈때마다 권한 설정해야해서 귀찮으니까 주석
+    // //알람
+    // //학생회 공지 알람 ON한 사용자들
+    // const [subscribe_data] = await pool.query(
+    //   `SELECT subscribe FROM subscriptions WHERE student_council_notice and subscribe is not null`
+    // );
+    // const message = {
+    //   message: `학생회 공지가 새로 올라왔습니다!`,
+    // };
+    // subscribe_data.map((subscribe) => {
+    //   try{
+    //     sendNotification(JSON.parse(subscribe.subscribe), message);
+    //   } catch(err) {
+    //     console.error(err);
+    //   }
+    // });
 
     let data_file;
     //첨부파일 table에 저장
-    console.log("에러체크 -> newFileName", newFileName);
     for (let i = 0; i < count; i++) {
       console.log("첨부파일 table에 저장 ", i,"번째");
-      newFileName = `${Date.now()}_${fileinfo.file[i].originalname}`;
+      newFileName = `${file_date}_${fileinfo.file[i].originalname}`;
       console.log("newFileName : ", newFileName);
       data_file = await pool.query(
         `INSERT INTO file_sc(no, file_infoN, file_originN) VALUES(?,?,?)`,
@@ -212,6 +217,7 @@ router.post("/post", fileFields, async (req, res) => {
           fileinfo.file[i].originalname
         ]
       );
+      console.log("에러체크 -> data_file", data_file);
     }
 
     let no = data[0].insertId;
@@ -227,7 +233,7 @@ router.post("/post", fileFields, async (req, res) => {
  * @param {File} file object that will be uploaded to Google Storage
  */
 const uploadImageToStorage = (file) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     console.log("file.originalname : ", file.originalname);
     if (!file) {
       reject('No image file');
@@ -236,16 +242,28 @@ const uploadImageToStorage = (file) => {
     //한글파일 이름
     file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
 
-    newFileName = `${file.originalname}_${Date.now()}`;
+    newFileName = `${file_date}_${file.originalname}`;
     console.log("newFileName : ", newFileName);
 
     let fileUpload = bucket.file('images/'+newFileName);
 
+    console.log("img uuid : ", uuid);
     const blobStream = fileUpload.createWriteStream({
       metadata: {
-        contentType: file.mimetype
+        firebaseStorageDownloadTokens: uuid
       }
     });
+
+    const imgToken_update = await pool.query(
+      `UPDATE student_council_notice SET imgAccessToken = ? WHERE no = ?`,
+      [uuid, sc_notice_id]
+    );
+    const imgName_update = await pool.query(
+      `UPDATE student_council_notice SET img = ? WHERE no = ?`,
+      [newFileName, sc_notice_id]
+    );
+    console.log("sc_notice_id : ", sc_notice_id);
+    console.log("imgToken_update : ", imgToken_update);
 
     blobStream.on('error', (error) => {
       console.log(error);
@@ -263,7 +281,7 @@ const uploadImageToStorage = (file) => {
 }
 
 const uploadFileToStorage = (file) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       if (!file) {
         reject('No image file');
       }
@@ -272,17 +290,43 @@ const uploadFileToStorage = (file) => {
       //file.originalname = Buffer.from(JSON.stringify(file.originalname), 'latin1').toString('utf8');
       file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
 
-      newFileName = `${Date.now()}_${file.originalname}`;
+      newFileName = `${file_date}_${file.originalname}`;
       console.log("newFileName : ", newFileName);
 
       let fileUpload = bucket.file('files/'+newFileName);
-
+      
+      console.log("uuid", uuid);
       const blobStream = fileUpload.createWriteStream({
         metadata: {
-          contentType: file.mimetype
+          firebaseStorageDownloadTokens: uuid
         }
       });
-  
+      
+      // const [file, meta] = bucket.upload(newFileName,{
+      //   destination: newFileName,
+      //   resumable: false,
+      //   public: true,
+      //   metadata: {
+      //     contentType: file.mimetype,
+      //     metadata : {
+      //       firebaseStorageDownloadTokens: uuidV4(),
+      //     },
+      //   },
+      // });
+
+      // try {
+        const fileToken_update = await pool.query(
+          `UPDATE file_sc SET file_accessToken = ? WHERE no = ?`,
+          [uuid, sc_notice_id]
+        );
+        console.log("file_sc fileToken_update~~");
+        console.log("sc_notice_id : ", sc_notice_id);
+        console.log("file_accessToken : ", uuid);
+        console.log("fileToken_update : ", fileToken_update);
+      // } catch (err) {
+      //   console.error(err);
+      // }
+
       blobStream.on('error', (error) => {
         console.log(error);
         reject('Something is wrong! Unable to upload at the moment.');
@@ -295,6 +339,14 @@ const uploadFileToStorage = (file) => {
       });
   
       blobStream.end(file.buffer);
+
+
+      
+      // const [metadata, response] = fileUpload.getMetadata();
+      // console.log("metadata : ", metadata)
+      // console.log("metadata.mediaLink", metadata.mediaLink)
+      // // return metadata.mediaLink;
+
     });
 }
 
