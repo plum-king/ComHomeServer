@@ -74,7 +74,9 @@ router.get("/:no", async (req, res) => {
             console.log("filename", filename);
             let file_accessToken= file_data[0][i].file_accessToken;
             console.log(file_accessToken);
-            body +=`<a href = "https://firebasestorage.googleapis.com/v0/b/comhome-7cab0.appspot.com/o/files%2F${filename}?alt=media&token=${file_accessToken}">${file_data[0][i].file_originN}</a><br>`;
+
+            //여기다 성윤아..
+            body +=`<a href = "https://firebasestorage.googleapis.com/v0/b/comhome-7cab0.appspot.com/o/%5B%EA%B3%A0%ED%95%99%EB%85%84%EB%B6%80_%ED%94%84%EB%9E%99%ED%83%88%5D.hwp?alt=media&token=0eca1a5b-1813-405f-b850-4f0919ce6e51">${file_data[0][i].file_originN}</a><br>`;
         }
     }else{
         body +=`<p>첨부파일이(가) 없습니다.</p>`
@@ -83,6 +85,7 @@ router.get("/:no", async (req, res) => {
     //console.log("file_data[0][i].file_accessToken;  :  ", file_data[0][i].file_accessTokenss)
     // let fileAccessToken=file_data[0][i].file_accessToken;
     // body +=`<a href = "https://firebasestorage.googleapis.com/v0/b/comhome-7cab0.appspot.com/o/files%2F1660713901807_tem.txt?alt=media&token=${fileAccessToken}">${file_data[0][i].file_originN}</a><br>`;
+
 
     console.log("data[0][0]", data[0][0]);
     // 테스트 할 떄만 아래 주석임~~~~~
@@ -125,19 +128,6 @@ router.get("/:no", async (req, res) => {
   else{
     res.json({message : '400 Bad Request'});
   }
-  
-
-
-//   const data = await pool.query(
-//     `SELECT * FROM student_council_notice where no = ?`,
-//     [sc_notice_no]
-//   );
-//   const data_file = await pool.query(`SELECT * FROM file_sc where no = ?`, [
-//     sc_notice_no,
-//   ]);
-//   const data_det = data[0][0];
-//   res.json({data_det: data_det, data_file: data_file, scrap: undefined});
-
 });
 
 // //firebase Admin초기화

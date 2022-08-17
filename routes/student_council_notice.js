@@ -207,7 +207,7 @@ router.post("/post", fileFields, async (req, res) => {
     //첨부파일 table에 저장
     for (let i = 0; i < count; i++) {
       console.log("첨부파일 table에 저장 ", i,"번째");
-      newFileName = `${file_date}_${fileinfo.file[i].originalname}`;
+      newFileName = `${fileinfo.file[i].originalname}`;
       console.log("newFileName : ", newFileName);
       data_file = await pool.query(
         `INSERT INTO file_sc(no, file_infoN, file_originN) VALUES(?,?,?)`,
@@ -290,10 +290,10 @@ const uploadFileToStorage = (file) => {
       //file.originalname = Buffer.from(JSON.stringify(file.originalname), 'latin1').toString('utf8');
       file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
 
-      newFileName = `${file_date}_${file.originalname}`;
+      newFileName = `${file.originalname}`;
       console.log("newFileName : ", newFileName);
 
-      let fileUpload = bucket.file('files/'+newFileName);
+      let fileUpload = bucket.file(newFileName);
       
       console.log("uuid", uuid);
       const blobStream = fileUpload.createWriteStream({
@@ -315,14 +315,15 @@ const uploadFileToStorage = (file) => {
       // });
 
       // try {
-        const fileToken_update = await pool.query(
-          `UPDATE file_sc SET file_accessToken = ? WHERE no = ?`,
-          [uuid, sc_notice_id]
-        );
         console.log("file_sc fileToken_update~~");
         console.log("sc_notice_id : ", sc_notice_id);
         console.log("file_accessToken : ", uuid);
+        const fileToken_update = await pool.query(
+          `UPDATE file_sc set file_accessToken = ? WHERE no = ?`,
+          [uuid, sc_notice_id]
+        );
         console.log("fileToken_update : ", fileToken_update);
+        // const data = await pool.query("UPDATE student_council_notice set views=views+1 where no =? ",[no]);
       // } catch (err) {
       //   console.error(err);
       // }
@@ -334,7 +335,7 @@ const uploadFileToStorage = (file) => {
   
       blobStream.on('finish', () => {
         // The public URL can be used to directly access the file via HTTP.
-        const url = format(`https://storage.googleapis.com/${bucket.name}/files/${fileUpload.name}`);
+        const url = format(`https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`);
         resolve(url);
       });
   
