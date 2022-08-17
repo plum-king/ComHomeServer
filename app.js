@@ -12,9 +12,14 @@ app.use(session({secret: "MySecret", resave: false, saveUninitialized: true}));
 //소켓
 const http = require('http');
 const server = http.createServer(app);
-const io = require('socket.io')(server);
-
-//app.set('socketio', io);  //채팅 router page에서 사용할떄 이거 해야함!!
+//const io = require('socket.io')(server);
+  
+const io = require('socket.io')(server,{
+  cors : {
+      origin :"http://localhost:3000",
+      credentials :true
+  }
+});
 
 // Passport setting
 app.use(passport.initialize());
@@ -104,20 +109,14 @@ app.use("/api/student_council_notice_detail", require("./routes/student_council_
 
 //채팅
 //app.use("/api/chat", require("./routes/chat")); //1대일 채팅
-app.use("/api/chat", require("./routes/chat_practice_bubble")); //버블(단체) 채팅
+//app.use("/api/chat", require("./routes/chat_practice_bubble")); //버블(단체) 채팅
 
 io.on('connection', (socket)=>{
-
-  // socket.on("room",(room) => {
-  //     socket.join(room); //join으로 room연결
-  //     console.log("유저 입장")
-  // });
-
   // 채팅방에 채팅 요청
-  socket.on('req_room_message', (roomnum, sender, msg) => {
-
+  socket.on('req_room_message', (roomnum, sender, msg) => {     //client > server
+      console.log(roomnum, sender);
       console.log("메시지:"+ msg);
-      io.to(roomnum).emit('noti_room_message', msg);
+      io.emit('noti_room_message', {roomnum, sender, msg} );  // server > client (내가 client로 보내주는)
 
       const sql="INSERT INTO b_chat (roomid, senderid, message, date) VALUES(?,?,?,?)";
       const params=[roomnum, sender, msg, new Date()];
@@ -135,9 +134,10 @@ io.on('connection', (socket)=>{
 });
 
 
-//졸업생 인터뷰
+//졸업생 인터뷰(채팅)
 app.use("/api/graduate_interview", require("./routes/graduate_interview"));
 app.use("/api/graduate_interview_list", require("./routes/graduate_interview_list"));
+app.use("/api/chat", require("./routes/chat_bubble")); //버블(단체) 채팅
 
 server.listen(port, () => {
   console.log(`Server running on port: ${port}`);
