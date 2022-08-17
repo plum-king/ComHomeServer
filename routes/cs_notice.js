@@ -25,10 +25,10 @@ const fileFields = upload.fields([
 
 router.post("/post", fileFields, async (req, res) => {
   const post = req.body;
-  const {img, file} = post.files;
+  const {img, file} = req.files;
 
   let count; //파일개수
-  if (post.files.file) {
+  if (req.files.file) {
     count = Object.keys(file).length;
   }
 
@@ -36,9 +36,8 @@ router.post("/post", fileFields, async (req, res) => {
   const notice_id = date % 10000;
   const title = post.title;
   const content = post.content;
-  const notice_img = post.files.img == undefined ? "" : post.files.img[0].path;
-  const notice_file =
-    post.files.file == undefined ? "" : post.files.file[0].path;
+  const notice_img = req.files.img == undefined ? "" : req.files.img[0].path;
+  const notice_file = req.files.file == undefined ? "" : req.files.file[0].path;
 
   const sql = `INSERT INTO cs_notice(no, iduser, title, content, upload_time, edited_date, views, img, file_status) VALUES(?,?,?,?,?,?,?,?,?)`;
   const params = [
@@ -65,15 +64,15 @@ router.post("/post", fileFields, async (req, res) => {
       message: `학과 공지글이 새로 올라왔습니다!`,
     };
     cs_data.map((subscribe) => {
-        sendNotification(JSON.parse(subscribe.subscribe), message);
-    })
+      sendNotification(JSON.parse(subscribe.subscribe), message);
+    });
 
     let data_file;
     //첨부파일 table에 저장
     for (let i = 0; i < count; i++) {
       const data_file = await pool.query(
         `INSERT INTO file_cs(no, file_infoN, file_originN) VALUES(?,?,?)`,
-        [notice_id, post.files.file[i].path, post.files.file[i].originalname]
+        [notice_id, req.files.file[i].path, req.files.file[i].originalname]
       );
     }
     let no = data[0].insertId;

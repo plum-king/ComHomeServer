@@ -17,13 +17,23 @@ webpush.setVapidDetails(subject, vapidPublic, vapidPrivate);
  * @param {any} data 푸시 알림으로 전달할 데이터 객체
  */
 async function sendNotification(subscription, data) {
-    try {
-        console.log(data);
-        const result = await webpush.sendNotification(subscription, JSON.stringify(data));
-        return result;
-    } catch (err) {
-        console.error(err);
-    }
+    // try {
+    //     console.log(data);
+    //     const result = await webpush.sendNotification(subscription, JSON.stringify(data));
+    //     return result;
+    // } catch (err) {
+    //     console.error(err);
+    // }
+  try {
+    console.log(data);
+    const result = await webpush.sendNotification(
+      subscription,
+      JSON.stringify(data)
+    );
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 exports.publicKey = vapidPublic;

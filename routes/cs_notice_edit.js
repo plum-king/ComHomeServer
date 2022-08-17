@@ -30,7 +30,7 @@ router.post("/update", fileFields, async (req, res) => {
   const date = new Date();
   const title = edit.title;
   const cont = edit.content;
-  const notice_img = edit.files.img == undefined ? "" : edit.files.img[0].path;
+  const notice_img = req.files.img == undefined ? "" : req.files.img[0].path;
   let status = 404;
   const sql1 =
     "UPDATE cs_notice SET title=?, content=?, edited_date=?, img=? WHERE no=?";

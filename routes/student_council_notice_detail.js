@@ -84,7 +84,6 @@ router.get("/:no", async (req, res) => {
     // let fileAccessToken=file_data[0][i].file_accessToken;
     // body +=`<a href = "https://firebasestorage.googleapis.com/v0/b/comhome-7cab0.appspot.com/o/files%2F1660713901807_tem.txt?alt=media&token=${fileAccessToken}">${file_data[0][i].file_originN}</a><br>`;
 
-
     console.log("data[0][0]", data[0][0]);
     // 테스트 할 떄만 아래 주석임~~~~~
     // if (req.user.id == data[0][0].iduser) {
@@ -126,6 +125,19 @@ router.get("/:no", async (req, res) => {
   else{
     res.json({message : '400 Bad Request'});
   }
+  
+
+
+//   const data = await pool.query(
+//     `SELECT * FROM student_council_notice where no = ?`,
+//     [sc_notice_no]
+//   );
+//   const data_file = await pool.query(`SELECT * FROM file_sc where no = ?`, [
+//     sc_notice_no,
+//   ]);
+//   const data_det = data[0][0];
+//   res.json({data_det: data_det, data_file: data_file, scrap: undefined});
+
 });
 
 // //firebase Admin초기화

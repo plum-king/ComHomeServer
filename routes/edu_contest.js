@@ -25,7 +25,7 @@ router.post("/post", upload.single("img"), async (req, res) => {
   const title = post.title;
   const content = post.content;
   const end_date = post.end_date;
-  const img = post.files.img == undefined ? "" : post.files.img[0].path;
+  const img = req.files.img == undefined ? "" : req.files.img[0].path;
   const now = new Date();
   try {
     const data = await pool.query(

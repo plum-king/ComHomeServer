@@ -7,17 +7,18 @@ const {sendNotification} = require("./push.js");
 const date_fns = require("date-fns");
 
 //작품전시 list 보이기
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
+  if (req.user) {
     let data;
     try {
       data = await pool.query("select * from exhibition");
     } catch (err) {
       console.error(err);
     }
-    let data_det=data[0];
+    let data_det = data[0];
     res.json({data_det: data_det});
+  }
 });
-
 
 //이미지 업로드를 위한 multer
 const upload = multer({
@@ -30,13 +31,6 @@ const upload = multer({
     },
   }),
 });
-
-// router.post("/", upload.single("img"), async (req, res) => {
-//   const data = await pool.query(`SELECT * FROM exhibition desc limit 10`);
-//   res.json({
-//     data_det: data[0],
-//   });
-// });
 
 router.post("/post", upload.single("img"), async (req, res) => {
   const userid = req.body.iduser;
@@ -51,7 +45,7 @@ router.post("/post", upload.single("img"), async (req, res) => {
   const link_github = post.link_github;
   const link_service = post.link_service;
 
-  const exh_img = post.files.img == undefined ? "" : post.files.img[0].path;
+  const exh_img = req.files.img == undefined ? "" : req.files.img[0].path;
 
   const sql =
     "INSERT INTO exhibition (iduser, title, content, img, award, stack, keyword, team, contestName, link_github, link_service) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,?)";
