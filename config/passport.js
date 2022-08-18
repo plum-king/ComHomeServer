@@ -21,12 +21,11 @@ passport.use(
       passReqToCallback: true,
     },
     async (request, accessToken, refreshToken, profile, done) => {
-      // 테스트를 위해 잠시 막아둠
-      // if (profile.email.indexOf("@sungshin.ac.kr") == -1) {
-      //   // console.log('성신이메일아님');
-      //   return done("Use only sungshin email!");
-      // } else {
-      //   // console.log('성신이메일임');
+      if (profile.email.indexOf("@sungshin.ac.kr") == -1) {
+        // console.log('성신이메일아님');
+        return done("Use only sungshin email!");
+      } else {
+        // console.log('성신이메일임');
       process.nextTick(async () => {
         let user = {};
         try {
@@ -37,17 +36,10 @@ passport.use(
           user.id = profile.id;
           user.name = profile.displayName;
           user.email = profile.email;
-          //console.log('profile: ', profile);
-          // console.log(profile.id);
-          // console.log(profile.displayName);
-          // console.log(profile.email);
 
           if (result.length == 1) {
             //로그인
             //console.log(result);
-            //user.name = result[0].name;
-            //user.email = result[0].email;
-            // console.log("41행");
           } else if (result.length == 0) {
             //새로운유저
             try {
@@ -61,7 +53,6 @@ passport.use(
             }
           } else {
             //오류발생
-            // console.log("51행");
             return done(false);
           }
           //console.log(user);
@@ -71,7 +62,7 @@ passport.use(
         }
       });
     }
-    // }
+     }
   )
 );
 
