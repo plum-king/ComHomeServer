@@ -4,7 +4,32 @@ const pool = require("../db");
 const multer = require("multer");
 const path = require("path");
 const {sendNotification} = require("./push.js");
+const Multer = require('multer');
+const {format} = require('util');
 const date_fns = require("date-fns");
+const { v4: uuidv4 } = require('uuid');
+const uuid = uuidv4();
+
+let no;
+const file_date = Date.now();
+
+const storage = new Storage({
+  projectId: "comhome-7cab0",
+  keyFilename: "../ComHomeServer/config/comhome-7cab0-firebase-adminsdk-dc7ia-e24746dcd5.json",
+});
+
+const bucket = storage.bucket("comhome-7cab0.appspot.com");
+
+const multer = Multer({
+  storage: Multer.memoryStorage(),
+  limits: {
+      fileSize: 20 * 1024 * 1024
+  }
+});
+
+const fileFields = multer.fields([
+  { name: 'img', maxCount: 1 },
+])
 
 //작품전시 list 보이기
 router.get("/", async (req, res) => {
@@ -33,6 +58,17 @@ const upload = multer({
 });
 
 router.post("/post", upload.single("img"), async (req, res) => {
+
+  const fileinfo=req.files;
+  const { img, file } = fileinfo;
+  
+  if (fileinfo.img) {
+    uploadImageToStorage(fileinfo.img[0]).then((success) => {
+    }).catch((error) => {
+    console.error(error);
+    });
+}
+
   const userid = req.body.iduser;
   const post = req.body;
   const exh_title = post.title;
@@ -83,5 +119,53 @@ router.post("/post", upload.single("img"), async (req, res) => {
     console.error(err);
   }
 });
+
+//추가
+/**
+ * Upload the image file to Google Storage
+ * @param {File} file object that will be uploaded to Google Storage
+ */
+
+const uploadImageToStorage = (file) => {
+  return new Promise(async (resolve, reject) => {
+  if (!file) {
+      reject('No image file');
+  }
+
+  //한글파일 이름
+  file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
+
+  newFileName = `${file_date}_${file.originalname}`;
+
+  let fileUpload = bucket.file('images/'+newFileName);
+
+  const blobStream = fileUpload.createWriteStream({
+      metadata: {
+          firebaseStorageDownloadTokens: uuid
+      }
+  });
+
+  const imgToken_update = await pool.query(
+      `UPDATE exhibition SET imgAccessToken = ? WHERE no = ?`,
+      [uuid, no]
+  );
+  const imgName_update = await pool.query(
+      `UPDATE exhibition SET img = ? WHERE no = ?`,
+      [newFileName, no]
+  );
+
+  blobStream.on('error', (error) => {
+      reject('Something is wrong! Unable to upload at the moment.');
+  });
+
+  blobStream.on('finish', () => {
+      // The public URL can be used to directly access the file via HTTP.
+      const url = format(`https://storage.googleapis.com/${bucket.name}/images/${fileUpload.name}`);
+      resolve(url);
+  });
+
+  blobStream.end(file.buffer);
+  });
+}
 
 module.exports = router;
