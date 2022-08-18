@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("../config/passport.js");
 const pool = require("../db.js");
-const templates = require("../lib/templates");
 
 router.get("/", async (req, res) => {
   const data = await pool.query(
