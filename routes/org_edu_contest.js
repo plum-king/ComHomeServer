@@ -1,11 +1,9 @@
-//크롤링(아직 안됨)
 const router = express.Router();
 const passport = require("../config/passport.js");
 const pool = require("../db.js");
 const templates = require("../lib/templates");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const log = console.log;
 
 const getHtml = async () => {
   try {

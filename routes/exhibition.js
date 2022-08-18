@@ -4,6 +4,7 @@ const pool = require("../db");
 const multer = require("multer");
 const path = require("path");
 const {sendNotification} = require("./push.js");
+const {Storage} = require('@google-cloud/storage');
 const Multer = require('multer');
 const {format} = require('util');
 const date_fns = require("date-fns");
@@ -60,7 +61,7 @@ const upload = multer({
 router.post("/post", upload.single("img"), async (req, res) => {
 
   const fileinfo=req.files;
-  const { img, file } = fileinfo;
+  const { img } = fileinfo;
   
   if (fileinfo.img) {
     uploadImageToStorage(fileinfo.img[0]).then((success) => {

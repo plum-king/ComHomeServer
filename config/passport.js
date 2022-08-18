@@ -22,10 +22,8 @@ passport.use(
     },
     async (request, accessToken, refreshToken, profile, done) => {
       if (profile.email.indexOf("@sungshin.ac.kr") == -1) {
-        // console.log('성신이메일아님');
         return done("Use only sungshin email!");
       } else {
-        // console.log('성신이메일임');
       process.nextTick(async () => {
         let user = {};
         try {
@@ -39,7 +37,6 @@ passport.use(
 
           if (result.length == 1) {
             //로그인
-            //console.log(result);
           } else if (result.length == 0) {
             //새로운유저
             try {
@@ -47,16 +44,13 @@ passport.use(
                 "INSERT INTO user (`iduser`, `email`, `name`) VALUES (?,?,?)",
                 [user.id, user.email, user.name]
               );
-              // console.log("db삽입 성공");
             } catch (err) {
               console.error(err);
             }
           } else {
-            //오류발생
             return done(false);
           }
-          //console.log(user);
-          return done(null, user); //user data 넘기기
+          return done(null, user);
         } catch (err) {
           console.error(err);
         }

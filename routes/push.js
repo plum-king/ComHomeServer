@@ -7,7 +7,6 @@ const subject = config.subject;
 const vapidPublic = config.vapidPublic;
 const vapidPrivate = config.vapidPrivate;
 
-// @ch10. 푸시 설정
 webpush.setGCMAPIKey(gcmKey);
 webpush.setVapidDetails(subject, vapidPublic, vapidPrivate);
 
@@ -17,15 +16,7 @@ webpush.setVapidDetails(subject, vapidPublic, vapidPrivate);
  * @param {any} data 푸시 알림으로 전달할 데이터 객체
  */
 async function sendNotification(subscription, data) {
-    // try {
-    //     console.log(data);
-    //     const result = await webpush.sendNotification(subscription, JSON.stringify(data));
-    //     return result;
-    // } catch (err) {
-    //     console.error(err);
-    // }
   try {
-    console.log(data);
     const result = await webpush.sendNotification(
       subscription,
       JSON.stringify(data)

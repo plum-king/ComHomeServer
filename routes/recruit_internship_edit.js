@@ -57,7 +57,6 @@ router.post("/update", fileFields, async (req, res) => {
     const message = {
       message: `채용 인턴십 글이 수정되었습니다!`,
     };
-    console.log(recruit_data);
     recruit_data.map((subscribe) => {
       sendNotification(JSON.parse(subscribe.subscribe), message);
     });
@@ -92,7 +91,6 @@ router.post("/delete", async (req, res) => {
   );
 
   if (file_status[0][0].not_file_status == 1) {
-    //console.log('첨부파일 존재함.->삭제하기');
     const data = await pool.query(`DELETE FROM file_intern WHERE no=?`, [
       notice_id,
     ]);
