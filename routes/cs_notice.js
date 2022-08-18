@@ -1,28 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
+const templates = require("../lib/templates");
 const multer = require("multer");
 const path = require("path");
 
-// //채용인턴십 글 작성하기
+// //학과공지 글 작성하기
 // router.get("/post", async (req, res) => {
 //     if(!req.user) {
 //       res.write(`<script type="text/javascript">alert('Please Login First !!')</script>`);
 //       res.write(`<script>window.location="/api/auth/login"</script>`);
 //       res.end();
 //     }
-//     const title = "채용인턴십 글 작성";
+//     const title = "학과공지글 작성";
 //     const head = ``;
 //     const body = `
-//     <form action="/api/recruit_internship/post" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
-//     <b>채용인턴십 공지 작성</b>
+//     <form action="/api/cs_notice/post" method ="post" enctype="multipart/form-data" accept-charset="UTF-8">
+//     <b>학과공지글 작성</b>
 //     <br>
 //     <label> 제목:
-//       <input type = "text" name = "notice_title" placeholder = "제목을 작성하세요" /> </label>
+//       <input type = "text" name = "title" placeholder = "제목을 작성하세요" /> </label>
 //       <br>
 //       <br>
 //       <label> 내용:
-//       <textarea name="notice_cont" placeholder = "내용을 작성하세요"></textarea></label>
+//       <textarea name="content" placeholder = "내용을 작성하세요"></textarea></label>
 //       <br>
 //       <label> 사진:
 //       <input type='file' name='img' accept='image/jpg, image/png, image/jpeg' /></label>
@@ -56,8 +57,8 @@ const fileFields = upload.fields([
 ]);
 
 router.post("/post", fileFields, async (req, res) => {
-  //req.setCharacterEncoding("utf-8");
   const post = req.body;
+  //req.setCharacterEncoding("utf-8");
   const {img, file} = post.files;
 
   let count; //파일개수
@@ -68,17 +69,17 @@ router.post("/post", fileFields, async (req, res) => {
   const date = new Date();
   const notice_id = date % 10000;
   const title = post.title;
-  const cont = post.content;
+  const content = post.content;
   const notice_img = post.files.img == undefined ? "" : post.files.img[0].path;
   const notice_file =
     post.files.file == undefined ? "" : post.files.file[0].path;
 
-  const sql = `INSERT INTO recruit_intern(no, iduser, title, content, upload_time, edited_date, views, img, file_status) VALUES(?,?,?,?,?,?,?,?,?)`;
+  const sql = `INSERT INTO cs_notice(no, iduser, title, content, upload_time, edited_date, views, img, file_status) VALUES(?,?,?,?,?,?,?,?,?)`;
   const params = [
     notice_id,
     req.user.id,
     title,
-    cont,
+    content,
     date,
     date,
     0,
@@ -91,14 +92,10 @@ router.post("/post", fileFields, async (req, res) => {
     //첨부파일 table에 저장
     for (let i = 0; i < count; i++) {
       const data_file = await pool.query(
-        `INSERT INTO file_intern(no, file_infoN, file_originN) VALUES(?,?,?)`,
+        `INSERT INTO file_cs(no, file_infoN, file_originN) VALUES(?,?,?)`,
         [notice_id, post.files.file[i].path, post.files.file[i].originalname]
       );
     }
-    res.json({
-      data: data,
-      data_file: data_file,
-    });
   } catch (err) {
     console.error(err);
   }

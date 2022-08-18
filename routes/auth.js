@@ -16,8 +16,15 @@ router.get('/google/callback',
 );
 
 function authSuccess(req, res) {
-  res.redirect('/');
+  console.log("req.user : "+ JSON.stringify(req.user));
+  res.redirect(`http://localhost:3000/userid/${req.user.id}`);
 }
+
+router.post('/userinfo',function(req,res,next){
+  res.json({
+    userinfo: req.user
+  });
+})
 
 router.get('/logout', function(req, res, next) {
   req.logout(function(err) {
