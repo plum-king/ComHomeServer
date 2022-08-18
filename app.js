@@ -10,6 +10,18 @@ const {publicKey, sendNotification} = require("./routes/push");
 app.use(cors());
 app.use(session({secret: "MySecret", resave: false, saveUninitialized: true}));
 
+//소켓
+const http = require('http');
+const server = http.createServer(app);
+//const io = require('socket.io')(server);
+  
+const io = require('socket.io')(server,{
+  cors : {
+      origin :"http://localhost:3000",
+      credentials :true
+  }
+});
+
 // Passport setting
 app.use(passport.initialize());
 app.use(passport.session());
@@ -38,8 +50,14 @@ app.get("/api", async (req, res) => {
 //프론트 임시로->url 바로 들어가도 된다.
 const getBtn = (user) => {
   return user !== undefined
-    ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> <a href = "/api/student_council_notice_list">학생회 공지</a><br><br><a href="/api/mypage">마이페이지</a>`
-    : `<a href="/api/auth/google">Google Login</a>`;
+    ? `${user.name} | <a href="/api/auth/logout">logout</a> <br><br> 
+    <a href = "/api/extra_review_list">대외활동 후기 바로가기</a> <br><br> 
+    <a href = "/api/job_review_list">취업 후기 바로가기</a> <br><br> 
+    <a href = "/api/edu_contest_list">교육/공모전 글 바로가기</a> <br><br> 
+    <a href = "/api/student_council_notice_list">학생회 공지</a> <br><br>
+    <a href = "/api/chat">선배와 채팅하기</a> <br><br>
+    <a href = "/api/graduate_interview_list">졸업생 인터뷰(선배들list)</a> <br><br>
+    `    : `<a href="/api/auth/google">Google Login</a>`;
 };
 
 const getPage = (title, description, auth) => {
@@ -61,7 +79,7 @@ const getPage = (title, description, auth) => {
             <br> <a href="/api/recruit_intern_list">채용인턴십페이지</a>
         </body>
         </html>
-        `;
+      `;
 };
 
 //routes
@@ -113,28 +131,7 @@ app.use("/api/edu_contest_edit", require("./routes/edu_contest_edit"));
 
 //교육/공모전 댓글
 app.use("/api/edu_contest_comment", require("./routes/edu_cont_comment"));
-app.use(
-  "/api/edu_contest_comment_edit",
-  require("./routes/edu_contest_comment_edit")
-);
-
-//학생회 공지 글
-app.use(
-  "/api/student_council_notice_list",
-  require("./routes/student_council_notice_list")
-);
-app.use(
-  "/api/student_council_notice",
-  require("./routes/student_council_notice")
-);
-app.use(
-  "/api/student_council_notice_detail",
-  require("./routes/student_council_notice_detail")
-);
-app.use(
-  "/api/student_council_notice_edit",
-  require("./routes/student_council_notice_edit")
-);
+app.use("/api/edu_contest_comment_edit", require("./routes/edu_contest_comment_edit"));
 
 //스크랩
 app.use("/api/scrap", require("./routes/scrap"));
@@ -148,6 +145,41 @@ app.get("/api/publicKey", (_req, res) => {
 });
 app.use("/api/pushSubscription", require("./routes/pushSubscription"));
 
-app.listen(port, () => {
+//학생회 공지 글
+app.use("/api/student_council_notice_list", require("./routes/student_council_notice_list"));
+app.use("/api/student_council_notice", require("./routes/student_council_notice"));
+app.use("/api/student_council_notice_detail", require("./routes/student_council_notice_detail"));
+app.use("/api/student_council_notice_edit",require("./routes/student_council_notice_edit"));
+
+
+//졸업생 인터뷰(채팅)
+app.use("/api/graduate_interview", require("./routes/graduate_interview"));
+app.use("/api/graduate_interview_list", require("./routes/graduate_interview_list"));
+app.use("/api/chat", require("./routes/chat_bubble")); //버블(단체) 채팅
+
+io.on('connection', (socket)=>{
+  // 채팅방에 채팅 요청
+  socket.on('req_room_message', (roomnum, sender, msg) => {     //client > server
+      console.log(roomnum, sender);
+      console.log("메시지:"+ msg);
+      io.emit('noti_room_message', {roomnum, sender, msg} );  // server > client (내가 client로 보내주는)
+
+      const sql="INSERT INTO b_chat (roomid, senderid, message, date) VALUES(?,?,?,?)";
+      const params=[roomnum, sender, msg, new Date()];
+      try{
+        const data= pool.query(sql,params);
+      } catch(err){
+        console.error(err);
+      }
+
+  });
+
+  socket.on('disconnect', async () => {
+      console.log('user disconnected');
+  });
+});
+
+
+server.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
