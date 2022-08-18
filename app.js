@@ -116,7 +116,7 @@ app.use("/api/edu_contest_comment_edit",require("./routes/edu_contest_comment_ed
 
 //학생회 공지 글
 app.use("/api/student_council_notice_list", require("./routes/student_council_notice_list"));
-app.use("/api/student_council_notice_check", require("./routes/student_council_notice_check"));
+//app.use("/api/student_council_notice_check", require("./routes/student_council_notice_check"));
 app.use("/api/student_council_notice", require("./routes/student_council_notice"));
 app.use("/api/student_council_notice_detail", require("./routes/student_council_notice_detail"));
 app.use("/api/student_council_notice_edit",require("./routes/student_council_notice_edit"));
